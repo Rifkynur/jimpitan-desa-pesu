@@ -10,9 +10,9 @@ const Navbar = () => {
     <Box
       sx={(theme) => ({
         width: "100%",
-        borderBottom: "1px solid #473b33",
+        // borderBottom: "1px solid #473b33",
         bgcolor: "#1e1611",
-        boxShadow: "0 0 5px #1e1611",
+        // boxShadow: "0 0 5px #1e1611",
         display: "flex",
         alignItems: "center",
         gap: "8px",
@@ -21,7 +21,7 @@ const Navbar = () => {
           padding: "16px",
         },
         [theme.breakpoints.up("md")]: {
-          padding: "20px",
+          padding: "16px",
         },
       })}
     >
@@ -48,6 +48,7 @@ const Navbar = () => {
           },
           [theme.breakpoints.up("md")]: {
             width: "75px",
+            ml: "20px",
           },
         })}
       ></Box>

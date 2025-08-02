@@ -32,9 +32,10 @@ body {
 
 body {
   margin: 0;
-  background: radial-gradient(circle at right bottom, #29221d, #0a0a0a);
+  background-color:var(--background);
+  /* background: radial-gradient(circle at right bottom, #29221d, #0a0a0a);
   background-size: cover;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat; */
   color: #ffffff;
 }
 

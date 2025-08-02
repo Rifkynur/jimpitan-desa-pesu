@@ -22,7 +22,7 @@ import { useSidebarStore } from "../store/sidebarStore";
 
 const menuItems = [
   { label: "Dasboard", icon: <FaHome />, to: "/dashboard" },
-  { label: "Jadwal", icon: <FaList />, to: "/jadwal" },
+  { label: "Jadwal", icon: <FaList />, to: "/schedule" },
   { label: "Pemasukan", icon: <FaWallet />, to: "/pemasukan" },
   { label: "Pengeluaran", icon: <FaCoins />, to: "/pengeluaran" },
   { label: "Rekapitulasi", icon: <FaChartPie />, to: "/rekapitulasi" },
@@ -46,11 +46,12 @@ const Sidebar = () => {
           maxWidth: "200px",
           position: "absolute",
           left: isOpen ? "0" : "-100%",
+          zIndex: 5,
         },
         [theme.breakpoints.up("md")]: {
           position: "relative",
           padding: "20px",
-          maxWidth: "350px",
+          maxWidth: "200px",
         },
       })}
     >

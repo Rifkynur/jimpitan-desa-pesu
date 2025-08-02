@@ -95,10 +95,10 @@ const LoginPage = () => {
             variant="outlined"
             fullWidth
             {...register("email", {
-              required: "Email is required",
+              required: "Email wajib diisi",
               pattern: {
                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: "Invalid email format",
+                message: "Format email yang anda masukan salah",
               },
             })}
             error={!!errors.email}
@@ -129,10 +129,10 @@ const LoginPage = () => {
             type={showPassword ? "text" : "password"}
             fullWidth
             {...register("password", {
-              required: "Password is required",
+              required: "Password wajib diisi",
               minLength: {
                 value: 6,
-                message: "Password must be at least 6 characters",
+                message: "Password minimal 6 karakter",
               },
             })}
             error={!!errors.password}
@@ -165,12 +165,17 @@ const LoginPage = () => {
           />
           <Button
             variant="contained"
-            sx={{
+            sx={(theme) => ({
               width: "100%",
               borderRadius: "12px",
-              py: "12px",
               bgcolor: "#fe6c00",
-            }}
+              [theme.breakpoints.down("sm")]: {
+                py: "6px",
+              },
+              [theme.breakpoints.up("md")]: {
+                width: "75px",
+              },
+            })}
             type="submit"
           >
             Login
@@ -178,12 +183,17 @@ const LoginPage = () => {
           <Button
             onClick={() => router.push("/dashboard")}
             variant="contained"
-            sx={{
+            sx={(theme) => ({
               width: "100%",
               borderRadius: "12px",
-              py: "12px",
-              bgcolor: "#fe6c00",
-            }}
+              bgcolor: "#fe1e00",
+              [theme.breakpoints.down("sm")]: {
+                py: "6px",
+              },
+              [theme.breakpoints.up("md")]: {
+                width: "75px",
+              },
+            })}
             type="button"
           >
             Back
