@@ -7,6 +7,20 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --clr-primary: #29221d;
+    --clr-primary-light: #473b33;
+    --clr-secondary: #1e1611;
+    --clr-white: #fff;
+    --clr-black: #000;
+    --clr-pumpkin: #fe6c00;
+    --clr-silver: #a8a5a6;
+    --clr-silver-v1: #bdbabb;
+    --clr-scarlet: #fe1e00;
+    --clr-scarlet-v1: rgb(254, 30, 0, 0.79);
+    --clr-green: #00fe93;
+    --clr-yellow: #fec80a;
+    --clr-jet: #302924;
+    --clr-peach: #ffc397;
   }
 }
 
@@ -17,11 +31,11 @@ body {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  background: radial-gradient(circle at right bottom, #29221d, #0a0a0a);
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #ffffff;
 }
 
 * {
