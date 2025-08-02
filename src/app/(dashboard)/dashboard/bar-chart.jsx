@@ -12,21 +12,57 @@ import {
 } from "recharts";
 import CustomTooltip from "@/app/components/custom-tooltip-chart";
 
-const data = [
-  { name: "Jan", uv: 400 },
-  { name: "Feb", uv: 300 },
-  { name: "Mar", uv: 200 },
-  { name: "Apr", uv: 278 },
-  { name: "May", uv: 189 },
-  { name: "Jun", uv: 189 },
-  { name: "Jul", uv: 189 },
-  { name: "Aug", uv: 189 },
-  { name: "Sep", uv: 189 },
-  { name: "Oct", uv: 189 },
-  { name: "Nov", uv: 189 },
-  { name: "Des", uv: 189 },
+const rawData = [
+  { rtIName: "09", month: "January", total: 50000 },
+  { rtIName: "10", month: "January", total: 60000 },
+  { rtIName: "11", month: "January", total: 70000 },
+  { rtIName: "09", month: "February", total: 50000 },
+  { rtIName: "10", month: "February", total: 60000 },
+  { rtIName: "11", month: "February", total: 70000 },
+  { rtIName: "09", month: "March", total: 50000 },
+  { rtIName: "10", month: "March", total: 60000 },
+  { rtIName: "11", month: "March", total: 70000 },
+  { rtIName: "09", month: "April", total: 50000 },
+  { rtIName: "10", month: "April", total: 60000 },
+  { rtIName: "11", month: "April", total: 70000 },
+  { rtIName: "09", month: "May", total: 50000 },
+  { rtIName: "10", month: "May", total: 60000 },
+  { rtIName: "11", month: "May", total: 70000 },
+  { rtIName: "09", month: "June", total: 50000 },
+  { rtIName: "10", month: "June", total: 60000 },
+  { rtIName: "11", month: "June", total: 70000 },
+  { rtIName: "09", month: "Jully", total: 50000 },
+  { rtIName: "10", month: "Jully", total: 60000 },
+  { rtIName: "11", month: "Jully", total: 70000 },
+  { rtIName: "09", month: "August", total: 50000 },
+  { rtIName: "10", month: "August", total: 60000 },
+  { rtIName: "11", month: "August", total: 70000 },
+  { rtIName: "09", month: "September", total: 55000 },
+  { rtIName: "10", month: "September", total: 65000 },
+  { rtIName: "11", month: "September", total: 75000 },
+  { rtIName: "09", month: "October", total: 55000 },
+  { rtIName: "10", month: "October", total: 65000 },
+  { rtIName: "11", month: "October", total: 75000 },
+  { rtIName: "09", month: "November", total: 55000 },
+  { rtIName: "10", month: "November", total: 65000 },
+  { rtIName: "11", month: "November", total: 75000 },
+  { rtIName: "09", month: "Desember", total: 55000 },
+  { rtIName: "10", month: "Desember", total: 65000 },
+  { rtIName: "11", month: "Desember", total: 75000 },
 ];
+const transformedData = Object.values(
+  rawData.reduce((acc, { month, rtIName, total }) => {
+    acc[month] = acc[month] || { month };
+    acc[month][rtIName] = total;
+    return acc;
+  }, {})
+);
+
+const colors = ["#fe6c00", "#3f51b5", "#4caf50"];
 const BarChartIncome = () => {
+  const rtNames = Object.keys(transformedData[0]).filter(
+    (key) => key !== "month"
+  );
   return (
     <Box
       sx={{
@@ -34,7 +70,7 @@ const BarChartIncome = () => {
         height: { xs: 300, sm: 400 },
         backgroundColor: "#ffffff20",
         borderRadius: 2,
-        p: 2,
+        p: "8px",
         boxShadow: 2,
       }}
     >
@@ -55,18 +91,37 @@ const BarChartIncome = () => {
         Monthly Report
       </Typography>
 
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data}>
+      <ResponsiveContainer
+        width="100%"
+        height="100%"
+        // style={{ backgroundColor: "red" }}
+      >
+        <BarChart
+          data={transformedData}
+          margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+          barGap={0}
+        >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" tick={{ fill: "#fff" }} />
-          <YAxis tick={{ fill: "#fff" }} />
+          <XAxis dataKey="month" tick={{ fill: "#fff" }} />
+          <YAxis
+            tick={{ fill: "#fff" }}
+            tickFormatter={(value) => {
+              if (value >= 1000000) return `${value / 1000000}M`;
+              if (value >= 1000) return `${value / 1000}k`;
+              return value;
+            }}
+          />
           <Tooltip cursor="transparent" content={<CustomTooltip />} />
           <Legend content={<CustomLegend />} />
-          <Bar
-            dataKey="uv"
-            fill="#fe6c00"
-            activeBar={{ fill: "#e55d00" }}
-          />{" "}
+          {rtNames.map((rt, index) => (
+            <Bar
+              key={rt}
+              dataKey={rt}
+              fill={colors[index % colors.length]}
+              activeBar={{ fill: colors[index % colors.length] }}
+              name={`RT ${rt}`}
+            />
+          ))}
         </BarChart>
       </ResponsiveContainer>
     </Box>

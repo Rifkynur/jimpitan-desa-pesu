@@ -29,7 +29,7 @@ const CustomTooltip = ({ active, payload, label }) => {
               }}
             />
             <Typography variant="body2" sx={{ color: "#fff" }}>
-              {entry.name}: <strong>{entry.value}</strong>
+              {entry.name}: <strong>Rp. {entry.value}</strong>
             </Typography>
           </Box>
         ))}
