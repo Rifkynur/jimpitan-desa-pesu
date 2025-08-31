@@ -1,16 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/common/app-sidebar";
+import Container from "@/components/common/container";
 
 const InterSans = Inter({
   variable: "--font-inter",
@@ -32,7 +25,13 @@ export default function RootLayout({
       <body
         className={`${InterSans.variable}  antialiased bg-dashboard-background text-clr-silver-v1`}
       >
-        {children}
+        <SidebarProvider>
+          <AppSidebar />
+          <main className="flex-1">
+            <SidebarTrigger className="mt-2 ms-2 " />
+            <Container>{children}</Container>
+          </main>
+        </SidebarProvider>
       </body>
     </html>
   );

@@ -6,6 +6,7 @@
 @theme inline {
   --color-dashboard-background: var(--dashboard-background);
   --color-dashboard-foreground: var(--dashboard-foreground);
+  --color-card-background: #2c2622;
   --color-clr-primary: var(--clr-primary);
   --color-clr-primary-light: var(--clr-primary-light);
   --color-clr-pumpkin: var(--clr-pumpkin);
@@ -93,6 +94,7 @@
 
   --dashboard-background: #221c17;
   --dashboard-foreground: #ededed;
+  --card-background: #2c2622;
   --clr-primary: #29221d;
   --clr-primary-light: #473b33;
   --clr-pumpkin: #fe6c00;
@@ -138,6 +140,10 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+}
+
+.sidebar-link:hover {
+  @apply bg-blue-100 text-blue-900;
 }
 
 @layer base {
