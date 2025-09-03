@@ -4,6 +4,7 @@ import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/common/app-sidebar";
 import Container from "@/components/common/container";
+import AppNavbar from "@/components/common/app-navbar";
 
 const InterSans = Inter({
   variable: "--font-inter",
@@ -28,8 +29,10 @@ export default function RootLayout({
         <SidebarProvider>
           <AppSidebar />
           <main className="flex-1">
-            <SidebarTrigger className="mt-2 ms-2 " />
-            <Container>{children}</Container>
+            <Container>
+              <AppNavbar />
+              {children}
+            </Container>
           </main>
         </SidebarProvider>
       </body>

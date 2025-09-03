@@ -30,7 +30,7 @@ const CashflowCard = ({
   icon = <Scale className="size-12 text-clr-jet" />,
 }: CashflowCardProps) => {
   return (
-    <Card className="bg-card-background border-red-600 border-2 text-white grid-cols-1">
+    <Card className="bg-card-background border-clr-pumpkin border-2 text-white grid-cols-1">
       <CardContent className="flex items-center justify-between gap-4 w-full">
         <div
           className={cn(

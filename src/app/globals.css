@@ -142,8 +142,30 @@
   --sidebar-ring: oklch(0.552 0.016 285.938);
 }
 
-.sidebar-link:hover {
-  @apply bg-blue-100 text-blue-900;
+/* untuk browser berbasis Webkit (Chrome, Edge, Safari, dll.) */
+.custom-scroll::-webkit-scrollbar {
+  width: 8px; /* lebar scrollbar */
+  height: 8px; /* tinggi scrollbar horizontal */
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1; /* warna track */
+  border-radius: 4px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-clr-pumpkin); /* warna thumb */
+  border-radius: 4px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #555; /* warna saat hover */
+}
+
+/* untuk Firefox */
+.custom-scroll {
+  scrollbar-width: thin; /* auto | thin | none */
+  scrollbar-color: var(--color-clr-pumpkin) #f1f1f1; /* thumb | track */
 }
 
 @layer base {

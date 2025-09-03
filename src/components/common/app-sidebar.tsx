@@ -10,8 +10,8 @@ import { SidebarLinks } from "./sidebar-links";
 
 export function AppSidebar() {
   return (
-    <Sidebar className="border-pumpkin ">
-      <SidebarContent className="bg-[#2c2520] text-clr-silver-v1">
+    <Sidebar className=" border-clr-pumpkin">
+      <SidebarContent className="bg-[#2c2520] text-white">
         <SidebarGroup className="mt-5">
           <SidebarGroupContent>
             <SidebarLinks />

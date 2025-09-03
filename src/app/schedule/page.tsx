@@ -1,5 +1,5 @@
 import React from "react";
-import ScheduleContainer from "@/components/common/Schedule/schedule-container";
+import ScheduleContainer from "@/components/Schedule/schedule-container";
 
 const Page = () => {
   return (

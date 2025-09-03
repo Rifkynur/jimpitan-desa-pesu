@@ -25,9 +25,9 @@ export function SidebarLinks() {
     { href: "/", label: "Home", icon: Home },
     { href: "/income", label: "Pemasukan", icon: DollarSign },
     { href: "/expense", label: "Pengeluaran", icon: Wallet },
-    { href: "/schedule", label: "Schedule", icon: CalendarDays },
-    { href: "/member", label: "Member", icon: Users },
-    { href: "/user", label: "User", icon: UserRound },
+    { href: "/schedule", label: "Jadwal", icon: CalendarDays },
+    { href: "/member", label: "Warga", icon: Users },
+    { href: "/user", label: "Petugas", icon: UserRound },
     { href: "/login", label: "Login", icon: LogIn },
   ];
 

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import CashflowContainer from "@/components/common/Home/cashflow-container";
+import CashflowContainer from "@/components/Home/cashflow-container";
 import Container from "@/components/common/container";
 
 export default function Home() {
