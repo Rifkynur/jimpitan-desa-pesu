@@ -1,5 +1,6 @@
+"use client";
 import React from "react";
-import { Button } from "../ui/button";
+import FormEditUser from "./form-edit-member";
 import {
   Dialog,
   DialogContent,
@@ -7,23 +8,24 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "../ui/input";
-import FormAddUser from "./form-add-member";
+} from "../ui/dialog";
+import { Button } from "../ui/button";
 
-const ButtonOpenModalAddMember = () => {
+type modalEditMemberProps = {
+  open: boolean;
+  setOpen: (value: boolean) => void;
+  id?: string | number;
+};
+const ModalEditMember = ({ open = false, setOpen }: modalEditMemberProps) => {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="bg-clr-pumpkin hover:bg-orange-600">Add</Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={() => setOpen(false)}>
       <DialogContent className="bg-clr-primary">
         <DialogHeader>
           <DialogTitle className="mb-2 font-bold text-lg text-center">
-            Tambahkan Warga Baru
+            Ubah Data Warga
           </DialogTitle>
           <DialogDescription className="mt-2" asChild>
-            <FormAddUser />
+            <FormEditUser />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
@@ -31,4 +33,4 @@ const ButtonOpenModalAddMember = () => {
   );
 };
 
-export default ButtonOpenModalAddMember;
+export default ModalEditMember;

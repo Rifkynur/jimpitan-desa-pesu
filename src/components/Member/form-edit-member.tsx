@@ -23,7 +23,7 @@ const formSchema = z.object({
   rt_id: z.string().min(1, { message: "Rt wajib diisi" }),
   status_id: z.string().min(1, { message: "Status warga wajib diisi" }),
 });
-const FormAddMember = () => {
+const FormEditMember = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,7 +40,7 @@ const FormAddMember = () => {
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* Username */}
+          {/* name */}
           <FormField
             control={form.control}
             name="name"
@@ -48,7 +48,7 @@ const FormAddMember = () => {
               <FormItem>
                 <FormLabel>Nama</FormLabel>
                 <FormControl>
-                  <Input placeholder="Masukkan nama" {...field} />
+                  <Input placeholder="Masukkan Nama" {...field} />
                 </FormControl>
                 <FormMessage className="text-left" />
               </FormItem>
@@ -60,7 +60,7 @@ const FormAddMember = () => {
             name="rt_id"
             render={({ field }) => (
               <FormItem>
-                <FormLabel></FormLabel>
+                <FormLabel>Rt</FormLabel>
                 <div className="relative">
                   <FormControl>
                     <SelectRt value={field.value} onChange={field.onChange} />
@@ -93,7 +93,7 @@ const FormAddMember = () => {
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
           >
-            Tambah
+            Edit
           </Button>
         </form>
       </Form>
@@ -101,4 +101,4 @@ const FormAddMember = () => {
   );
 };
 
-export default FormAddMember;
+export default FormEditMember;

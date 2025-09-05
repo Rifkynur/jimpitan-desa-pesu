@@ -24,8 +24,8 @@ type DataTableProps<T> = {
   data: T[];
   columns: Column<T>[];
   showActions?: boolean;
-  onEdit?: (row: T) => void;
-  onDelete?: (row: T) => void;
+  onEdit?: (row: string | number) => void;
+  onDelete?: (row: string | number) => void;
 };
 
 export function DataTable<T extends { id: string | number }>({
@@ -36,7 +36,7 @@ export function DataTable<T extends { id: string | number }>({
   onDelete,
 }: DataTableProps<T>) {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [selectedId, setSelectedId] = useState<string | number | null>(null);
+  const [selectedId, setSelectedId] = useState<string>("");
   return (
     <div className="max-w-[100vw] overflow-x-auto  rounded-lg p-3 bg-card-background custom-scroll">
       <Table className="w-full  rounded-2xl ">
@@ -76,7 +76,7 @@ export function DataTable<T extends { id: string | number }>({
                         size="sm"
                         className="bg-clr-yellow text-black hover:bg-amber-500 cursor-pointer"
                         //   variant="outline"
-                        onClick={() => onEdit(row)}
+                        onClick={() => onEdit(row?.id)}
                       >
                         <PencilLine />
                       </Button>
@@ -86,7 +86,7 @@ export function DataTable<T extends { id: string | number }>({
                         className="cursor-pointer"
                         size="sm"
                         variant="destructive"
-                        onClick={() => onDelete(row)}
+                        onClick={() => onDelete(row?.id)}
                       >
                         <Trash2 />
                       </Button>

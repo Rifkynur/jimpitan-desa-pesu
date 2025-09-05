@@ -29,6 +29,7 @@ type SearchableSelectProps = {
   value?: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  className?: string;
 };
 
 export function SelectComponent({
@@ -36,6 +37,7 @@ export function SelectComponent({
   value,
   onChange,
   placeholder = "Pilih opsi...",
+  className,
 }: SearchableSelectProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -51,13 +53,13 @@ export function SelectComponent({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[150px] md:w-[200px] justify-between"
+          className={cn("w-[150px] md:w-[200px] justify-between", className)}
         >
           {selectedOption ? selectedOption.label : placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0 ">
+      <PopoverContent className={"w-[200px] p-0 "}>
         <Command className="bg-clr-primary border-[#ffffff50] text-white">
           <CommandInput placeholder="Cari..." />
           <CommandList>

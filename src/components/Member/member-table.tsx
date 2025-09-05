@@ -1,8 +1,10 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { DataTable } from "../common/table-component";
 import { PaginationComponent } from "../common/pagination-component";
 import { Badge } from "../ui/badge";
+import ModalEditMember from "./modal-edit-member";
+import ModalDeleteData from "../common/modal-delete-data";
 
 type Member = {
   id: number;
@@ -38,14 +40,37 @@ const column = [
 ];
 
 const MemberTable = () => {
+  const [id, setId] = useState<string | number>("");
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+  const handleOpenEditMember = (id: string | number) => {
+    setId(id);
+    setOpenEditModal(true);
+  };
+
+  const handleDeleteMember = (id: string | number) => {
+    setId(id);
+    setOpenDeleteModal(true);
+  };
   return (
     <div>
+      <ModalDeleteData
+        id={id}
+        open={openDeleteModal}
+        setOpen={setOpenDeleteModal}
+      />
+      <ModalEditMember
+        open={openEditModal}
+        setOpen={setOpenEditModal}
+        id={id}
+      />
       <DataTable
         data={dummyData}
         columns={column}
         showActions
-        onEdit={(user) => alert(`Edit ${user.name}`)}
-        onDelete={(user) => alert(`Delete ${user.name}`)}
+        onEdit={handleOpenEditMember}
+        onDelete={handleDeleteMember}
       />
       <PaginationComponent />
     </div>
