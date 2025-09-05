@@ -13,7 +13,6 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import SelectStatus from "./select-status";
 import SelectRt from "./select-rt";
 
 const formSchema = z.object({
@@ -23,7 +22,7 @@ const formSchema = z.object({
   rt_id: z.string().min(1, { message: "Rt wajib diisi" }),
   status_id: z.string().min(1, { message: "Status warga wajib diisi" }),
 });
-const FormEditMember = () => {
+const FormEditUser = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,7 +39,7 @@ const FormEditMember = () => {
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* name */}
+          {/* Username */}
           <FormField
             control={form.control}
             name="name"
@@ -48,7 +47,7 @@ const FormEditMember = () => {
               <FormItem>
                 <FormLabel>Nama</FormLabel>
                 <FormControl>
-                  <Input placeholder="Masukkan Nama" {...field} />
+                  <Input placeholder="Masukkan nama" {...field} />
                 </FormControl>
                 <FormMessage className="text-left" />
               </FormItem>
@@ -70,24 +69,6 @@ const FormEditMember = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="status_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <div className="relative">
-                  <FormControl>
-                    <SelectStatus
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
-                  </FormControl>
-                </div>
-                <FormMessage className="text-left" />
-              </FormItem>
-            )}
-          />
 
           <Button
             type="submit"
@@ -101,4 +82,4 @@ const FormEditMember = () => {
   );
 };
 
-export default FormEditMember;
+export default FormEditUser;

@@ -1,7 +1,12 @@
 import React from "react";
+import UserContainer from "@/components/User/user-container";
 
 const Page = () => {
-  return <div>Page</div>;
+  return (
+    <>
+      <UserContainer />
+    </>
+  );
 };
 
 export default Page;

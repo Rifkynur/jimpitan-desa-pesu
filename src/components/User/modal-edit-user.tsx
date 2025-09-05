@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import FormEditMember from "./form-edit-member";
+import FormEditUser from "./form-edit-user";
 import {
   Dialog,
   DialogContent,
@@ -16,7 +16,7 @@ type modalEditMemberProps = {
   setOpen: (value: boolean) => void;
   id?: string | number;
 };
-const ModalEditMember = ({ open = false, setOpen }: modalEditMemberProps) => {
+const ModalEditUser = ({ open = false, setOpen }: modalEditMemberProps) => {
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
       <DialogContent className="bg-clr-primary">
@@ -25,7 +25,7 @@ const ModalEditMember = ({ open = false, setOpen }: modalEditMemberProps) => {
             Ubah Data Warga
           </DialogTitle>
           <DialogDescription className="mt-2" asChild>
-            <FormEditMember />
+            <FormEditUser />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
@@ -33,4 +33,4 @@ const ModalEditMember = ({ open = false, setOpen }: modalEditMemberProps) => {
   );
 };
 
-export default ModalEditMember;
+export default ModalEditUser;

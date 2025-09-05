@@ -44,7 +44,7 @@ export function DataTable<T extends { id: string | number }>({
           <TableRow>
             {columns.map((col) => (
               <TableHead
-                key={col.key.toString()}
+                key={col?.key?.toString()}
                 className="text-clr-silver font-bold text-center p-1 "
               >
                 {col.label}

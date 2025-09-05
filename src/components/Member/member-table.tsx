@@ -7,7 +7,7 @@ import ModalEditMember from "./modal-edit-member";
 import ModalDeleteData from "../common/modal-delete-data";
 
 type Member = {
-  id: number;
+  id: number | string;
   name: string;
   rt: string;
   status: string;

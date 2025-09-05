@@ -60,7 +60,7 @@ const FormAddMember = () => {
             name="rt_id"
             render={({ field }) => (
               <FormItem>
-                <FormLabel></FormLabel>
+                <FormLabel>Rt</FormLabel>
                 <div className="relative">
                   <FormControl>
                     <SelectRt value={field.value} onChange={field.onChange} />

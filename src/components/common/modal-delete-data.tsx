@@ -24,19 +24,21 @@ const ModalDeleteData = ({ id, open, setOpen, url }: modalDeleteData) => {
           <DialogTitle className="mb-2 font-bold text-lg text-center">
             Hapus Data
           </DialogTitle>
-          <DialogDescription className="mt-2 text-clr-silver">
-            <p>Data yang anda hapus tidak bisa dikembalikan lagi.</p>
-            <p className="mt-1">Apakah anda yakin menghapus data ini?</p>
-            <div className="flex items-center justify-end gap-2 mt-2">
-              <Button className="bg-clr-pumpkin cursor-pointer font-bold hover:bg-orange-500">
-                Yakin
-              </Button>
-              <Button
-                className="bg-red-500 font-bold hover:bg-red-600 cursor-pointer"
-                onClick={() => setOpen(false)}
-              >
-                Batal
-              </Button>
+          <DialogDescription className="mt-2 text-clr-silver" asChild>
+            <div>
+              <p>Data yang anda hapus tidak bisa dikembalikan lagi.</p>
+              <p className="mt-1">Apakah anda yakin menghapus data ini?</p>
+              <div className="flex items-center justify-end gap-2 mt-2">
+                <Button className="bg-clr-pumpkin cursor-pointer font-bold hover:bg-orange-500">
+                  Yakin
+                </Button>
+                <Button
+                  className="bg-red-500 font-bold hover:bg-red-600 cursor-pointer"
+                  onClick={() => setOpen(false)}
+                >
+                  Batal
+                </Button>
+              </div>
             </div>
           </DialogDescription>
         </DialogHeader>
