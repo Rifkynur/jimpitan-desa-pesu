@@ -149,7 +149,7 @@
 }
 
 .custom-scroll::-webkit-scrollbar-track {
-  background: #f1f1f1; /* warna track */
+  background: #000; /* warna track */
   border-radius: 4px;
 }
 
@@ -165,7 +165,7 @@
 /* untuk Firefox */
 .custom-scroll {
   scrollbar-width: thin; /* auto | thin | none */
-  scrollbar-color: var(--color-clr-pumpkin) #f1f1f1; /* thumb | track */
+  scrollbar-color: var(--color-clr-pumpkin) #00000050; /* thumb | track */
 }
 
 @layer base {

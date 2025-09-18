@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import MemberTable from "./member-table";
 import SearchMember from "./search-member";
 import ButtonOpenModalAddMember from "./button-open-modal-add";
-import FilterSelectRt from "./filterSelectRt";
+import FilterSelectRt from "../common/filter-select-rt";
 
 const MemberContainer = () => {
   const [selectRt, setSelectRt] = useState("");

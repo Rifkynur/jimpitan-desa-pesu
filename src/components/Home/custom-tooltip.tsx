@@ -51,7 +51,7 @@ export function CustomTooltip({
               )}
               <span className="font-medium text-white">{name}:</span>
               <span className="ml-1 text-white">
-                {formatter ? formatter(value, name) : value}
+                Rp. {formatter ? formatter(value, name) : value}
               </span>
             </li>
           );

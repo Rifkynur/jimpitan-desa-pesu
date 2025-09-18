@@ -17,6 +17,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { CustomTooltip } from "./custom-tooltip";
 
 export const description = "A pie chart with a label list";
 
@@ -53,9 +54,7 @@ export function PieChartComponnet() {
           className="[&_.recharts-text]:fill-background mx-auto aspect-square max-h-[850px]"
         >
           <PieChart>
-            <ChartTooltip
-              content={<ChartTooltipContent nameKey="income" hideLabel />}
-            />
+            <ChartTooltip cursor={false} content={<CustomTooltip />} />
             <Pie data={chartData} dataKey="income">
               <LabelList
                 dataKey="rt"

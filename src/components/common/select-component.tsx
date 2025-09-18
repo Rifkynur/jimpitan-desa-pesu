@@ -20,13 +20,13 @@ import {
 } from "@/components/ui/command";
 
 type Option = {
-  value: string;
+  value: any;
   label: string;
 };
 
 type SearchableSelectProps = {
   options: Option[];
-  value?: string;
+  value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
@@ -69,7 +69,7 @@ export function SelectComponent({
                 <CommandItem
                   key={opt.value}
                   onSelect={() => {
-                    onChange(opt.value);
+                    onChange(opt?.value);
                     setOpen(false);
                   }}
                 >

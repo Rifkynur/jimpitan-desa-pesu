@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { SelectComponent } from "../common/select-component";
+import { SelectComponent } from "./select-component";
 
 const FilterSelectRt = () => {
   const [selectedRt, setSelectedRt] = useState("");

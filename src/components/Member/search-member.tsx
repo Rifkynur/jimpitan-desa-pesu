@@ -8,7 +8,7 @@ const SearchMember = () => {
     <SearchInput
       value={search}
       onChange={setSearch}
-      placeholder="cari warga..."
+      placeholder="Cari Warga..."
     />
   );
 };
