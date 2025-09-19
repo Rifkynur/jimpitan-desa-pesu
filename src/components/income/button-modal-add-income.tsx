@@ -9,9 +9,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "../ui/input";
-import FormAddUser from "./form-add-member";
+import FormAddIncome from "./form-add-income";
 
-const ButtonOpenModalAddMember = () => {
+const ButtonModalAddIncome = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -20,10 +20,10 @@ const ButtonOpenModalAddMember = () => {
       <DialogContent className="bg-clr-primary border-clr-pumpkin">
         <DialogHeader>
           <DialogTitle className="mb-2 font-bold text-lg text-center">
-            Tambahkan Warga Baru
+            Tambahkan Pemasukan
           </DialogTitle>
           <DialogDescription className="mt-2" asChild>
-            <FormAddUser />
+            <FormAddIncome />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
@@ -31,4 +31,4 @@ const ButtonOpenModalAddMember = () => {
   );
 };
 
-export default ButtonOpenModalAddMember;
+export default ButtonModalAddIncome;

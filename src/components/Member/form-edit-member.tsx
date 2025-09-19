@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import SelectStatus from "./select-status";
-import SelectRt from "./select-rt";
+import SelectRt from "../income/select-rt";
 
 const formSchema = z.object({
   name: z.string().min(3, {

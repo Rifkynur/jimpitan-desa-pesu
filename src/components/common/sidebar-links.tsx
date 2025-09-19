@@ -13,6 +13,7 @@ import {
   LogIn,
   Wallet,
   DollarSign,
+  ClipboardCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -27,6 +28,7 @@ export function SidebarLinks() {
     { href: "/expense", label: "Pengeluaran", icon: Wallet },
     { href: "/schedule", label: "Jadwal", icon: CalendarDays },
     { href: "/member", label: "Warga", icon: Users },
+    { href: "/report", label: "Report", icon: ClipboardCheck },
     { href: "/user", label: "Petugas", icon: UserRound },
     { href: "/login", label: "Login", icon: LogIn },
   ];

@@ -6,6 +6,10 @@ type PayloadItem = {
   name: string;
   value: number | string;
   color?: string;
+  payload?: {
+    rt?: string;
+    [key: string]: any; // biar fleksibel kalau nanti ada field lain
+  };
   fill?: string; // tambahan kalau Recharts kirim fill, bisa dipakai sebagai warna
 };
 type CustomTooltipProps = {
@@ -28,7 +32,7 @@ export function CustomTooltip({
   return (
     <div
       className={cn(
-        "rounded-lg border bg-[#00000070] p-3 text-popover-foreground shadow-md",
+        "rounded-lg border-clr-pumpkin border-2 bg-[#00000070] p-3 text-popover-foreground shadow-md",
         className
       )}
     >
@@ -39,20 +43,20 @@ export function CustomTooltip({
       )}
       <ul className="space-y-1">
         {payload.map((entry, index) => {
-          const { name, value, color, fill } = entry;
+          // kalau ada payload.rt berarti ini PieChart
+          const labelName = entry.payload?.rt || entry.name;
+          const value = entry.value;
 
           return (
             <li key={index} className="flex items-center text-sm">
-              {(color || fill) && (
+              {(entry.color || entry.fill) && (
                 <span
                   className="mr-2 h-2 w-2 rounded-full"
-                  style={{ backgroundColor: color || fill }}
+                  style={{ backgroundColor: entry.color || entry.fill }}
                 />
               )}
-              <span className="font-medium text-white">{name}:</span>
-              <span className="ml-1 text-white">
-                Rp. {formatter ? formatter(value, name) : value}
-              </span>
+              <span className="font-medium text-white">{labelName}:</span>
+              <span className="ml-1 text-white">Rp. {value}</span>
             </li>
           );
         })}

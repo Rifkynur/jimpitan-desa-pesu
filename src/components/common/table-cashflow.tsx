@@ -16,38 +16,28 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const data = [
-  {
-    name: "Warga 1",
-    values: [
-      "Rp.5000",
-      "Rp.4000",
-      "Rp.3000",
-      "Rp.2000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-      "Rp.4000",
-    ],
-  },
-  { name: "Warga 2", values: ["Rp.1500", "Rp.1500", "Rp.2500", "Rp.3000"] },
-  { name: "Warga 2", values: ["Rp.1500", "Rp.1500", "Rp.2500", "Rp.3000"] },
-];
+type AmountData = {
+  id: string;
+  amount: number | string;
+};
+type TableRowData = {
+  name: string;
+  values: AmountData[];
+};
 
-const TableCashflow = () => {
+type TableCashflowProps = {
+  headers: string[];
+  data: TableRowData[];
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string | number) => void;
+};
+
+const TableCashflow = ({
+  headers,
+  data,
+  onEdit,
+  onDelete,
+}: TableCashflowProps) => {
   return (
     <div className="overflow-x-auto max-w-[100vw] w-full bg-card-background custom-scroll ">
       <Table className="">
@@ -82,10 +72,10 @@ const TableCashflow = () => {
               <TableCell className="sticky left-0 p-2 font-medium z-10  text-white bg-[#221c17]">
                 {row.name}
               </TableCell>
-              {row.values.map((v, idx) => (
+              {row?.values?.map((v, idx) => (
                 <TableCell key={idx}>
                   <div className="flex items-center py-2 justify-between">
-                    <span>{v}</span>
+                    <span>{v.amount}</span>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <button className="p-1 px-2 rounded hover:bg-muted">
@@ -96,12 +86,14 @@ const TableCashflow = () => {
                         align="end"
                         className="bg-[#00000080] text-white border-clr-pumpkin"
                       >
-                        <DropdownMenuItem onClick={() => alert(`Edit ${v}`)}>
+                        <DropdownMenuItem onClick={() => alert(`Edit ${v.id}`)}>
                           Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => alert(`Hapus ${v}`)}>
-                          Delete
-                        </DropdownMenuItem>
+                        {onDelete && (
+                          <DropdownMenuItem onClick={() => onDelete(v.id)}>
+                            Delete
+                          </DropdownMenuItem>
+                        )}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>

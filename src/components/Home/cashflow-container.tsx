@@ -22,11 +22,11 @@ const CashflowContainer = () => {
         />
         <CashflowCard title="Dana" />
       </div>
-      <div className="flex items-center gap-4 md:gap-6">
+      <div className="flex items-center gap-2">
         <FilterYear />
         <FilterSelectRt />
       </div>
-      <div className=" grid grid-cols-1 lg:grid-cols-12 lg:gap-4">
+      <div className=" grid grid-cols-1 gap-2 lg:grid-cols-12 lg:gap-4">
         <BarChartComponent />
         <PieChartComponnet />
       </div>

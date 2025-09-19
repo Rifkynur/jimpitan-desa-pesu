@@ -47,7 +47,7 @@ export function SelectComponent({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         asChild
-        className="border-[#ffffff50] bg-clr-primary hover:bg-[#ffffff70]"
+        className="border-clr-pumpkin bg-clr-primary hover:bg-[#ffffff70]"
       >
         <Button
           variant="outline"
@@ -59,8 +59,8 @@ export function SelectComponent({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className={"w-[200px] p-0 "}>
-        <Command className="bg-clr-primary border-[#ffffff50] text-white">
+      <PopoverContent className={"w-[200px] p-0 border border-clr-pumpkin "}>
+        <Command className="bg-clr-primary border-clr-pumpkin text-white">
           <CommandInput placeholder="Cari..." />
           <CommandList>
             <CommandEmpty>Tidak ditemukan</CommandEmpty>

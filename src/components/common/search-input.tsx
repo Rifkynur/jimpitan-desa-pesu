@@ -14,13 +14,13 @@ const SearchInput = ({
   placeholder = "Cari...",
 }: SearchInputProps) => {
   return (
-    <div className="relative max-w-sm ">
+    <div className="relative  rounded-md max-w-sm ">
       <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
       <Input
         type="text"
         placeholder={placeholder}
         value={value}
-        className="pl-8"
+        className="pl-8 "
         onChange={(e) => onChange(e.target.value)}
       />
     </div>

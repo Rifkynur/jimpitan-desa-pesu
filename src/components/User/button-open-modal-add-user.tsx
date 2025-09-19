@@ -17,7 +17,7 @@ const ButtonOpenModalAddUser = () => {
       <DialogTrigger asChild>
         <Button className="bg-clr-pumpkin hover:bg-orange-600">Add</Button>
       </DialogTrigger>
-      <DialogContent className="bg-clr-primary">
+      <DialogContent className="bg-clr-primary border-clr-pumpkin">
         <DialogHeader>
           <DialogTitle className="mb-2 font-bold text-lg text-center">
             Tambahkan Petugas Baru

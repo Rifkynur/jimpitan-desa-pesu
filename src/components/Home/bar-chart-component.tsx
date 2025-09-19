@@ -65,7 +65,7 @@ export function BarChartComponent() {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="leading-none text-clr-silver font-medium lg:text-lg">
+        <div className="leading-none text-clr-silver font-medium mx-auto lg:text-lg">
           Menampilkan total Pemasukan Perbulan
         </div>
       </CardFooter>
