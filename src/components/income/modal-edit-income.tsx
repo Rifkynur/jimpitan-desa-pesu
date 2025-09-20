@@ -22,7 +22,7 @@ const ModalEditIncome = ({ open = false, setOpen }: ModalEditIncomeProps) => {
       <DialogContent className="bg-clr-primary">
         <DialogHeader>
           <DialogTitle className="mb-2 font-bold text-lg text-center">
-            Ubah Data Warga
+            Ubah Data Pemasukan
           </DialogTitle>
           <DialogDescription className="mt-2" asChild>
             <FormEditIncome />

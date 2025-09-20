@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Form,
   FormControl,
@@ -34,6 +34,7 @@ const formSchema = z.object({
   }),
 });
 const FormAddIncome = () => {
+  const [openCalendar, setOpenCalendar] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -85,7 +86,7 @@ const FormAddIncome = () => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Tanggal</FormLabel>
-                <Popover>
+                <Popover open={openCalendar} onOpenChange={setOpenCalendar}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -106,21 +107,21 @@ const FormAddIncome = () => {
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
-                      modifiersClassNames={{
-                        selected: "bg-red-500 text-white rounded-md",
-                        today:
-                          "border border-clr-pumpkin text-clr-pumpkin font-bold",
-                      }}
                       classNames={{
                         nav_button:
                           "h-8 w-8 rounded-md bg-clr-pumpkin text-white hover:bg-clr-pumpkin/90",
                         nav_button_previous: "absolute left-2",
                         nav_button_next: "absolute right-2",
                         caption_label: "text-lg font-semibold text-clr-silver",
+                        today: "bg-slate-700 rounded-lg text-white",
+                        selected: "bg-red-700 text-red-500 rounded-lg",
                       }}
                       mode="single"
                       selected={field.value}
-                      onSelect={field.onChange}
+                      onSelect={(date) => {
+                        field.onChange(date);
+                        setOpenCalendar(false);
+                      }}
                       initialFocus
                       captionLayout="label"
                     />

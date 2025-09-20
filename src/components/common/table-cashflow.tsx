@@ -86,9 +86,11 @@ const TableCashflow = ({
                         align="end"
                         className="bg-[#00000080] text-white border-clr-pumpkin"
                       >
-                        <DropdownMenuItem onClick={() => alert(`Edit ${v.id}`)}>
-                          Edit
-                        </DropdownMenuItem>
+                        {onEdit && (
+                          <DropdownMenuItem onClick={() => onEdit(v.id)}>
+                            Edit
+                          </DropdownMenuItem>
+                        )}
                         {onDelete && (
                           <DropdownMenuItem onClick={() => onDelete(v.id)}>
                             Delete

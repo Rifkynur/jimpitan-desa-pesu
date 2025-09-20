@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { PaginationComponent } from "../common/pagination-component";
 import TableCashflow from "../common/table-cashflow";
 import ModalDeleteData from "../common/modal-delete-data";
+import ModalEditIncome from "./modal-edit-income";
 
 const IncomeTable = () => {
   const [id, setId] = useState<string | number>("");
@@ -45,6 +46,7 @@ const IncomeTable = () => {
 
   const handleEditIncome = (id: string | number) => {
     setId(id);
+    setOpenEditModal(true);
   };
 
   return (
@@ -53,6 +55,11 @@ const IncomeTable = () => {
         id={id}
         setOpen={setOpenDeleteModal}
         open={openDeleteModal}
+      />
+      <ModalEditIncome
+        open={openEditModal}
+        id={id}
+        setOpen={setOpenEditModal}
       />
       <div className="flex flex-col">
         <TableCashflow
