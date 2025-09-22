@@ -32,7 +32,7 @@ type TableCashflowProps = {
   onDelete?: (id: string | number) => void;
 };
 
-const TableCashflow = ({
+const TableIncome = ({
   headers,
   data,
   onEdit,
@@ -54,12 +54,6 @@ const TableCashflow = ({
             </TableHead>
             <TableHead className="text-white py-2 font-bold">
               05-09-2024
-            </TableHead>
-            <TableHead className="text-white py-2 font-bold">
-              14-09-2024
-            </TableHead>
-            <TableHead className="text-white py-2 font-bold">
-              14-09-2024
             </TableHead>
             <TableHead className="text-white py-2 font-bold">
               14-09-2024
@@ -109,4 +103,4 @@ const TableCashflow = ({
   );
 };
 
-export default TableCashflow;
+export default TableIncome;

@@ -1,9 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { PaginationComponent } from "../common/pagination-component";
-import TableCashflow from "../common/table-cashflow";
+import TableCashflow from "../common/table-income";
 import ModalDeleteData from "../common/modal-delete-data";
 import ModalEditIncome from "./modal-edit-income";
+import TableIncome from "../common/table-income";
 
 const IncomeTable = () => {
   const [id, setId] = useState<string | number>("");
@@ -62,7 +63,7 @@ const IncomeTable = () => {
         setOpen={setOpenEditModal}
       />
       <div className="flex flex-col">
-        <TableCashflow
+        <TableIncome
           data={data}
           onDelete={handleDeleteIncome}
           onEdit={handleEditIncome}

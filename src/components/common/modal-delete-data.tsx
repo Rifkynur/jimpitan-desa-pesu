@@ -17,6 +17,10 @@ type modalDeleteData = {
 };
 
 const ModalDeleteData = ({ id, open, setOpen, url }: modalDeleteData) => {
+  const deleteData = () => {
+    alert(`data dengan id ${id} telah terhapus`);
+    setOpen(false);
+  };
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
       <DialogContent className="bg-clr-primary">
@@ -29,7 +33,10 @@ const ModalDeleteData = ({ id, open, setOpen, url }: modalDeleteData) => {
               <p>Data yang anda hapus tidak bisa dikembalikan lagi.</p>
               <p className="mt-1">Apakah anda yakin menghapus data ini?</p>
               <div className="flex items-center justify-end gap-2 mt-2">
-                <Button className="bg-clr-pumpkin cursor-pointer font-bold hover:bg-orange-500">
+                <Button
+                  className="bg-clr-pumpkin cursor-pointer font-bold hover:bg-orange-500"
+                  onClick={deleteData}
+                >
                   Yakin
                 </Button>
                 <Button

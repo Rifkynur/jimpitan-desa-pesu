@@ -1,7 +1,8 @@
 import React from "react";
+import ExpenseContainer from "@/components/expense/expense-container";
 
 const ExpensePage = () => {
-  return <div>ExpensePage</div>;
+  return <ExpenseContainer />;
 };
 
 export default ExpensePage;
