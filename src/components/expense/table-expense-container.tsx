@@ -4,6 +4,7 @@ import TableExpense from "./table-expense";
 import { DataTable } from "../common/table-component";
 import { log } from "console";
 import ModalDeleteData from "../common/modal-delete-data";
+import ModalEditExpense from "./modal-edit-expense";
 
 const TableExpenseContainer = () => {
   const [id, setId] = useState<string | number>("");
@@ -50,6 +51,11 @@ const TableExpenseContainer = () => {
     setId(id);
     setOpenDeleteModal(true);
   };
+
+  const handleEditExpense = (id: string | number) => {
+    setId(id);
+    setOpenEditModal(true);
+  };
   return (
     <>
       <ModalDeleteData
@@ -57,11 +63,17 @@ const TableExpenseContainer = () => {
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}
       />
+      <ModalEditExpense
+        open={openEditModal}
+        setOpen={setOpenEditModal}
+        id={id}
+      />
       <DataTable
         columns={column}
         data={dataDummmy}
         showActions
         onDelete={handleDeleteExpense}
+        onEdit={handleEditExpense}
       />
     </>
   );
