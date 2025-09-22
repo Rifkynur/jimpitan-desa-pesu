@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
+import { useFetchApi } from "@/hooks/use-fetch-api";
+import { log } from "node:console";
 
 const formSchema = z.object({
   username: z.string().min(3, {
@@ -27,6 +29,7 @@ const formSchema = z.object({
 
 const CardLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { sendRequest, data, loading, error } = useFetchApi();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,8 +38,16 @@ const CardLogin = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const datas = await sendRequest({
+      method: "post",
+      url: "auth/login",
+      data: values,
+    });
+    console.log(datas);
+    localStorage.setItem("role", datas?.userData?.role?.name);
+
+    error ? null : form.reset();
   }
 
   return (
@@ -98,6 +109,7 @@ const CardLogin = () => {
             <Button
               type="submit"
               className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
+              disabled={loading}
             >
               Login
             </Button>

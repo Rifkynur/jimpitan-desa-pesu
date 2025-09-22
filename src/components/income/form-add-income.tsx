@@ -29,6 +29,7 @@ import { cn } from "@/lib/utils";
 const formSchema = z.object({
   name: z.string().min(1, { message: "Nama wajib diisi" }),
   rt_id: z.string().min(1, { message: "Rt wajib diisi" }),
+  amount: z.number().min(1, { message: "Jumlah wajib diisi" }),
   date: z.date().refine((val) => !!val, {
     message: "Tanggal wajib diisi",
   }),
@@ -40,6 +41,7 @@ const FormAddIncome = () => {
     defaultValues: {
       name: "",
       rt_id: "",
+      amount: 0,
       date: new Date(),
     },
   });
@@ -76,6 +78,26 @@ const FormAddIncome = () => {
                 <FormControl>
                   <SelectName onChange={field.onChange} value={field.value} />
                 </FormControl>
+                <FormMessage className="text-left" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="amount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Jumlah</FormLabel>
+                <div className="relative">
+                  <FormControl>
+                    <Input
+                      placeholder="Masukkan Jumlah Pengeluaran"
+                      {...field}
+                      type="number"
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                </div>
                 <FormMessage className="text-left" />
               </FormItem>
             )}
