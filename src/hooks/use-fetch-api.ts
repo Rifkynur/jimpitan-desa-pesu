@@ -21,19 +21,12 @@ export const useFetchApi = <T = unknown>() => {
         params: config.params,
         withCredentials: true,
       });
-      toast.success("berhasil");
 
       setData(response.data);
       return response.data;
     } catch (error) {
       const err = error as AxiosError<{ msg: string }>;
       setError(err.message);
-
-      if (err.response) {
-        toast.error(err.response.data.msg);
-      } else {
-        toast.error("Unexpected error, coba lagi.");
-      }
       return null;
     } finally {
       setLoading(false);
