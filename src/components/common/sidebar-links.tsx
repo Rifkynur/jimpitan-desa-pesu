@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect, useState } from "react";
 import {
   SidebarMenu,
   SidebarMenuItem,
@@ -18,11 +18,32 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { useAuthStore } from "@/store/auth-store";
+import { useLogout } from "@/hooks/use-logout";
 
 export function SidebarLinks() {
   const pathname = usePathname();
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const checkAuth = useAuthStore((state) => state.checkAuth);
+  const [ready, setReady] = useState(false);
 
-  const links = [
+  const logout = useLogout();
+
+  useEffect(() => {
+    checkAuth(); // update isLoggedIn dari cookie
+    setReady(true); // tunda render sampai isLoggedIn valid
+  }, []);
+
+  if (!ready) return null;
+
+  type LinkItem = {
+    href?: string;
+    label: string;
+    icon: React.ComponentType<any>;
+    onClick?: () => void;
+  };
+
+  const links: LinkItem[] = [
     { href: "/", label: "Home", icon: Home },
     { href: "/income", label: "Pemasukan", icon: DollarSign },
     { href: "/expense", label: "Pengeluaran", icon: Wallet },
@@ -30,24 +51,40 @@ export function SidebarLinks() {
     { href: "/member", label: "Warga", icon: Users },
     { href: "/report", label: "Report", icon: ClipboardCheck },
     { href: "/user", label: "Petugas", icon: UserRound },
-    { href: "/login", label: "Login", icon: LogIn },
   ];
+
+  const authLink: LinkItem = isLoggedIn
+    ? { label: "Logout", icon: LogIn, onClick: logout }
+    : { href: "/login", label: "Login", icon: LogIn };
 
   return (
     <SidebarMenu className="gap-3">
-      {links.map((link) => (
-        <SidebarMenuItem key={link.href}>
+      {links.concat(authLink).map((link) => (
+        <SidebarMenuItem key={link.label}>
           <SidebarMenuButton asChild>
-            <Link
-              href={link.href}
-              className={clsx(
-                "flex items-center gap-2 rounded-md px-3 py-2 transition-colors hover:!bg-orange-600 hover:!text-clr-silver",
-                pathname === link.href ? "bg-clr-pumpkin " : ""
-              )}
-            >
-              <link.icon className="h-4 w-4" />
-              <span className="font-bold">{link.label}</span>
-            </Link>
+            {link.onClick ? (
+              <button
+                onClick={link.onClick}
+                className={clsx(
+                  "flex items-center gap-2 rounded-md px-3 py-2 transition-colors hover:!bg-orange-600 hover:!text-clr-silver",
+                  pathname === link.href ? "bg-clr-pumpkin" : ""
+                )}
+              >
+                <link.icon className="h-4 w-4" />
+                <span className="font-bold">{link.label}</span>
+              </button>
+            ) : (
+              <Link
+                href={link.href!}
+                className={clsx(
+                  "flex items-center gap-2 rounded-md px-3 py-2 transition-colors hover:!bg-orange-600 hover:!text-clr-silver",
+                  pathname === link.href ? "bg-clr-pumpkin" : ""
+                )}
+              >
+                <link.icon className="h-4 w-4" />
+                <span className="font-bold">{link.label}</span>
+              </Link>
+            )}
           </SidebarMenuButton>
         </SidebarMenuItem>
       ))}

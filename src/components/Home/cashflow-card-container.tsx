@@ -36,8 +36,6 @@ const CashflowCardContainer = () => {
             icon: <Scale className="size-12 text-clr-jet" />,
           },
         ];
-        console.log(coloredData);
-
         setAllData(coloredData);
       } catch (error) {
         console.log(error);
