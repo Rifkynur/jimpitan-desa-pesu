@@ -1,13 +1,5 @@
 import React, { ReactNode } from "react";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Scale } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +8,7 @@ type CashflowCardProps = {
   amount?: string | number;
   color?: string;
   icon?: ReactNode;
+  loading?: boolean;
 };
 
 const colorVariants: Record<string, string> = {
@@ -32,19 +25,21 @@ const CashflowCard = ({
   return (
     <Card className="bg-card-background border-clr-pumpkin border-2 text-white grid-cols-1">
       <CardContent className="flex items-center justify-between gap-4 w-full">
-        <div
-          className={cn(
-            "font-bold size-fit p-2 rounded-full",
-            colorVariants[color] ?? "bg-gray-500"
-          )}
-        >
-          {icon}
-        </div>
-        <div className="flex flex-col justify-between h-full w-full">
-          <p className="font-bold text-lg">Total {title}</p>
-          <div className="w-full h-1 bg-red-50 rounded-2xl"></div>
-          <p className="font-semibold">Rp.{amount}</p>
-        </div>
+        <>
+          <div
+            className={cn(
+              "font-bold size-fit p-2 rounded-full",
+              colorVariants[color] ?? "bg-gray-500"
+            )}
+          >
+            {icon}
+          </div>
+          <div className="flex flex-col justify-between h-full w-full">
+            <p className="font-bold text-lg">Total {title}</p>
+            <div className="w-full h-1 bg-red-50 rounded-2xl"></div>
+            <p className="font-semibold">Rp.{amount}</p>
+          </div>
+        </>
       </CardContent>
     </Card>
   );
