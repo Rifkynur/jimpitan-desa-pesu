@@ -64,7 +64,7 @@ export function DataTable<T extends { id: string | number }>({
                 {columns.map((col) => (
                   <TableCell
                     key={col.key.toString()}
-                    className="text-center   "
+                    className="text-center  capitalize "
                   >
                     {col.render ? col.render(row) : (row as any)[col.key]}
                   </TableCell>

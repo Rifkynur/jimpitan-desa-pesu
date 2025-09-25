@@ -1,22 +1,24 @@
+"use client";
 import { create } from "zustand";
-import Cookies from "js-cookie";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-// cookie tidak bisa terbaca oleh fe karena http only dan untuk auth belum selesai
 type AuthState = {
   isLoggedIn: boolean;
-  checkAuth: () => void;
-  logout: () => void;
+  role?: string | null;
+  logouts: () => void;
+  login: (role: string) => void;
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
-  isLoggedIn: false,
-  checkAuth: () => {
-    const token = Cookies.get("jwt");
-    console.log("checkAuth dijalankan, token:", token);
-    set({ isLoggedIn: !!token });
-  },
-  logout: () => {
-    Cookies.remove("jwt");
-    set({ isLoggedIn: false });
-  },
-}));
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      isLoggedIn: false,
+      logouts: () => set({ isLoggedIn: false, role: null }),
+      login: (role: string) => set({ isLoggedIn: true, role }),
+    }),
+    {
+      name: "auth-storage",
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);

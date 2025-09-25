@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   FormControl,
@@ -14,27 +14,53 @@ import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import SelectRt from "./select-rt";
+import { useFetchApi } from "@/hooks/use-fetch-api";
+import { Rt } from "@/types/rt-type";
+import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
+
+type FormAddUserProps = {
+  onSuccess: () => void;
+};
 
 const formSchema = z.object({
-  name: z.string().min(3, {
+  username: z.string().min(3, {
     message: "Nama minimal 3 karakter",
   }),
-  rt_id: z.string().min(1, { message: "Rt wajib diisi" }),
-  status_id: z.string().min(1, { message: "Status warga wajib diisi" }),
+  rtId: z.string().min(1, { message: "Rt wajib diisi" }),
+  password: z.string().min(4, { message: "Password Wajib diisi" }),
 });
-const FormAddUser = () => {
+
+const FormAddUser = ({ onSuccess }: FormAddUserProps) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const { loading, sendRequest } = useFetchApi();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      rt_id: "",
-      status_id: "",
+      username: "",
+      rtId: "",
+      password: "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const addUser = async () => {
+      const handleAddUser = await sendRequest({
+        url: "users",
+        method: "post",
+        data: values,
+      });
+      if (handleAddUser) {
+        toast.success("Berhasil Menambah Petugas Baru");
+        onSuccess();
+      } else {
+        toast.error("Gagal Menambah Petugas Baru");
+      }
+    };
+    addUser();
   }
+
   return (
     <div>
       <Form {...form}>
@@ -42,7 +68,7 @@ const FormAddUser = () => {
           {/* Username */}
           <FormField
             control={form.control}
-            name="name"
+            name="username"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Nama</FormLabel>
@@ -56,7 +82,7 @@ const FormAddUser = () => {
 
           <FormField
             control={form.control}
-            name="rt_id"
+            name="rtId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Rt</FormLabel>
@@ -69,8 +95,40 @@ const FormAddUser = () => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="space-y-2">
+                <FormLabel>Password</FormLabel>
+                <div className="relative">
+                  <FormControl>
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Masukkan password"
+                      {...field}
+                      className="pr-10" // kasih space buat ikon
+                    />
+                  </FormControl>
+                  <button
+                    type="button"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? (
+                      <EyeOff size={18} className="cursor-pointer" />
+                    ) : (
+                      <Eye size={18} className="cursor-pointer" />
+                    )}
+                  </button>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <Button
+            disabled={loading}
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
           >

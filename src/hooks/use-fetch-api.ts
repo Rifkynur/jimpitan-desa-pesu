@@ -25,8 +25,17 @@ export const useFetchApi = <T = unknown>() => {
       setData(response.data);
       return response.data;
     } catch (error) {
-      const err = error as AxiosError<{ msg: string }>;
-      setError(err.message);
+      if (axios.isAxiosError(error)) {
+        // sekarang TypeScript tahu ini AxiosError
+        const message = error.response?.data?.msg ?? error.message;
+        console.log(message);
+        setError(message);
+      } else {
+        // error bukan AxiosError
+        console.log("Unexpected error:", error);
+        setError("Ada Kesalahan");
+      }
+
       return null;
     } finally {
       setLoading(false);

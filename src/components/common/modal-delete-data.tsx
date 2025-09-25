@@ -8,17 +8,36 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
+import { useFetchApi } from "@/hooks/use-fetch-api";
+import { toast } from "sonner";
 
 type modalDeleteData = {
   id: string | number;
   open: boolean;
   setOpen: (value: boolean) => void;
   url?: string;
+  onSuccess: () => void;
 };
 
-const ModalDeleteData = ({ id, open, setOpen, url }: modalDeleteData) => {
-  const deleteData = () => {
-    alert(`data dengan id ${id} telah terhapus`);
+const ModalDeleteData = ({
+  id,
+  open,
+  setOpen,
+  url,
+  onSuccess,
+}: modalDeleteData) => {
+  const { sendRequest } = useFetchApi();
+  const deleteData = async () => {
+    const handleDeleteData = await sendRequest({
+      url: `${url}/${id}`,
+      method: "delete",
+    });
+    if (handleDeleteData) {
+      toast.success("Berhasil Menghapus data");
+      onSuccess();
+    } else {
+      toast.error("Gagal Menghapus Data");
+    }
     setOpen(false);
   };
   return (

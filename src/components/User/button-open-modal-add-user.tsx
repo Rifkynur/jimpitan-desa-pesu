@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -11,9 +12,13 @@ import {
 import { Input } from "../ui/input";
 import FormAddUser from "./form-add-user";
 
-const ButtonOpenModalAddUser = () => {
+type ButtonOpenModalAddUserProps = {
+  onSuccess: () => void;
+};
+const ButtonOpenModalAddUser = ({ onSuccess }: ButtonOpenModalAddUserProps) => {
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-clr-pumpkin hover:bg-orange-600">Add</Button>
       </DialogTrigger>
@@ -23,7 +28,12 @@ const ButtonOpenModalAddUser = () => {
             Tambahkan Petugas Baru
           </DialogTitle>
           <DialogDescription className="mt-2" asChild>
-            <FormAddUser />
+            <FormAddUser
+              onSuccess={() => {
+                onSuccess();
+                setOpen(false);
+              }}
+            />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

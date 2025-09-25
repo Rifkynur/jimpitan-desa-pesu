@@ -16,7 +16,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import { useFetchApi } from "@/hooks/use-fetch-api";
-import { log } from "node:console";
+import { useAuthStore } from "@/store/auth-store";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   username: z.string().min(3, {
@@ -29,6 +31,9 @@ const formSchema = z.object({
 
 const CardLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuthStore();
+  const router = useRouter();
+
   const { sendRequest, data, loading, error } = useFetchApi();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,16 +43,25 @@ const CardLogin = () => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const datas = await sendRequest({
-      method: "post",
-      url: "auth/login",
-      data: values,
-    });
-    console.log(datas);
-    localStorage.setItem("role", datas?.userData?.role?.name);
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    const handleLogin = async () => {
+      const datas = await sendRequest({
+        method: "post",
+        url: "auth/login",
+        data: values,
+      });
+      if (datas) {
+        toast.success("Berhasil login");
+        router.push("/");
+        login(datas?.userData?.role?.name);
+      } else {
+        toast.error(error);
+      }
 
-    error ? null : form.reset();
+      form.reset();
+    };
+
+    handleLogin();
   }
 
   return (

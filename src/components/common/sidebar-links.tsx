@@ -23,18 +23,9 @@ import { useLogout } from "@/hooks/use-logout";
 
 export function SidebarLinks() {
   const pathname = usePathname();
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  const checkAuth = useAuthStore((state) => state.checkAuth);
-  const [ready, setReady] = useState(false);
+  const { isLoggedIn } = useAuthStore();
 
   const logout = useLogout();
-
-  useEffect(() => {
-    checkAuth(); // update isLoggedIn dari cookie
-    setReady(true); // tunda render sampai isLoggedIn valid
-  }, []);
-
-  if (!ready) return null;
 
   type LinkItem = {
     href?: string;

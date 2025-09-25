@@ -3,43 +3,16 @@ import React, { useState } from "react";
 import { DataTable } from "../common/table-component";
 import ModalDeleteData from "../common/modal-delete-data";
 import ModalEditUser from "./modal-edit-user";
+import { user } from "@/types/user-type";
+import SpinnerLoader from "../common/spiner-loading";
 
-type user = {
-  id: string | number;
-  rt: string;
-  username: string;
+type UserTableProps = {
+  users: user[];
+  loading?: boolean;
+  onSuccess: () => void;
 };
 
-const dataDummmy = [
-  {
-    id: 1,
-    rt: "RT 09",
-    username: "wawan",
-  },
-  {
-    id: 2,
-    rt: "RT 10",
-    username: "Endar",
-  },
-  {
-    id: 3,
-    rt: "RT 11",
-    username: "Andika",
-  },
-];
-
-const column = [
-  {
-    key: "username",
-    label: "Username",
-  },
-  {
-    key: "rt",
-    label: "Rt",
-  },
-];
-
-const UserTable = () => {
+const UserTable = ({ users, loading, onSuccess }: UserTableProps) => {
   const [id, setId] = useState<string | number>("");
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -52,21 +25,41 @@ const UserTable = () => {
     setId(id);
     setOpenEditModal(true);
   };
+
+  const column = [
+    {
+      key: "username",
+      label: "Nama",
+    },
+    { key: "rt", label: "RT" },
+  ];
+
+  const tableData = users?.map((data) => ({
+    id: data.id,
+    username: data.username,
+    rt: data.rt.name,
+  }));
   return (
     <div>
       <ModalDeleteData
         id={id}
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}
+        url="users"
+        onSuccess={onSuccess}
       />
       <ModalEditUser open={openEditModal} setOpen={setOpenEditModal} />
-      <DataTable
-        columns={column}
-        data={dataDummmy}
-        showActions
-        onDelete={handleDeleteModal}
-        onEdit={handleEditModal}
-      />
+      {loading ? (
+        <SpinnerLoader />
+      ) : (
+        <DataTable
+          columns={column}
+          data={tableData}
+          showActions
+          onDelete={handleDeleteModal}
+          onEdit={handleEditModal}
+        />
+      )}
     </div>
   );
 };

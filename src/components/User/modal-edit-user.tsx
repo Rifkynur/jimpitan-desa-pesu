@@ -22,7 +22,7 @@ const ModalEditUser = ({ open = false, setOpen }: modalEditMemberProps) => {
       <DialogContent className="bg-clr-primary">
         <DialogHeader>
           <DialogTitle className="mb-2 font-bold text-lg text-center">
-            Ubah Data Warga
+            Ubah Data Petugas
           </DialogTitle>
           <DialogDescription className="mt-2" asChild>
             <FormEditUser />

@@ -19,7 +19,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 
-type Option = {
+export type Option = {
   value: any;
   label: string;
 };
