@@ -13,15 +13,15 @@ type UserTableProps = {
 };
 
 const UserTable = ({ users, loading, onSuccess }: UserTableProps) => {
-  const [id, setId] = useState<string | number>("");
+  const [id, setId] = useState<string>("");
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 
-  const handleDeleteModal = (id: string | number) => {
+  const handleDeleteModal = (id: string) => {
     setId(id);
     setOpenDeleteModal(true);
   };
-  const handleEditModal = (id: string | number) => {
+  const handleEditModal = (id: string) => {
     setId(id);
     setOpenEditModal(true);
   };
@@ -48,7 +48,12 @@ const UserTable = ({ users, loading, onSuccess }: UserTableProps) => {
         url="users"
         onSuccess={onSuccess}
       />
-      <ModalEditUser open={openEditModal} setOpen={setOpenEditModal} />
+      <ModalEditUser
+        open={openEditModal}
+        setOpen={setOpenEditModal}
+        onSuccess={onSuccess}
+        id={id}
+      />
       {loading ? (
         <SpinnerLoader />
       ) : (

@@ -24,11 +24,11 @@ type DataTableProps<T> = {
   data: T[];
   columns: Column<T>[];
   showActions?: boolean;
-  onEdit?: (row: string | number) => void;
-  onDelete?: (row: string | number) => void;
+  onEdit?: (row: string) => void;
+  onDelete?: (row: string) => void;
 };
 
-export function DataTable<T extends { id: string | number }>({
+export function DataTable<T extends { id: string }>({
   data,
   columns,
   showActions = false,

@@ -10,15 +10,9 @@ type selectRtProps = {
   onChange: (value: string) => void;
 };
 const SelectRt = ({ onChange, value }: selectRtProps) => {
-  const [selected, setSelected] = useState("");
   const [allRt, SetAllRt] = useState<Option[]>([]);
 
   const { sendRequest } = useFetchApi();
-  const selectOptions = [
-    { value: "id rt 09", label: "Rt 09" },
-    { value: "id rt 10", label: "Rt 10" },
-    { value: "id rt 11", label: "Rt 11" },
-  ];
   useEffect(() => {
     const getAllRt = async () => {
       const rt = await sendRequest({ url: "rt" });

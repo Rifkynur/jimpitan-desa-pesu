@@ -15,7 +15,6 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import SelectRt from "./select-rt";
 import { useFetchApi } from "@/hooks/use-fetch-api";
-import { Rt } from "@/types/rt-type";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
 
