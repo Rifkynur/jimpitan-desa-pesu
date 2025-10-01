@@ -1,19 +1,44 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SelectComponent } from "./select-component";
+import { useFetchApi } from "@/hooks/use-fetch-api";
+import { Rt } from "@/types/rt-type";
 
-const FilterSelectRt = () => {
-  const [selectedRt, setSelectedRt] = useState("");
+type option = {
+  value: string;
+  label: string;
+};
 
-  const options = [
-    { value: "id rt 09", label: "RT 09" },
-    { value: "id rt 10", label: "rt 10" },
-    { value: "id rt 11", label: "rt 11" },
-  ];
+type FilterSelectRtProps = {
+  selectedRt: string;
+  setSelectedRt: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const FilterSelectRt = ({ selectedRt, setSelectedRt }: FilterSelectRtProps) => {
+  const { sendRequest } = useFetchApi();
+  const [optionRt, setOptionRt] = useState<option[]>([]);
+
+  useEffect(() => {
+    const getAllRt = async () => {
+      const allRt = await sendRequest({ url: "/rt" });
+      console.log(allRt.allRt);
+      const formatedOption: option[] = [
+        { value: "all", label: "Semua Rt" },
+
+        ...allRt.allRt.map((data: Rt) => ({
+          value: data.id,
+          label: `Rt : ${data.name}`,
+        })),
+      ];
+      setOptionRt(formatedOption);
+    };
+    getAllRt();
+  }, []);
+
   return (
     <SelectComponent
       onChange={setSelectedRt}
-      options={options}
+      options={optionRt}
       value={selectedRt}
       placeholder="Pilih Rt"
     />

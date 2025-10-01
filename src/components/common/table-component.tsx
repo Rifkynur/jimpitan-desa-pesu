@@ -97,7 +97,10 @@ export function DataTable<T extends { id: string }>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length + (showActions ? 1 : 0)}>
+              <TableCell
+                className="text-center"
+                colSpan={columns.length + (showActions ? 1 : 0)}
+              >
                 Tidak ada data
               </TableCell>
             </TableRow>

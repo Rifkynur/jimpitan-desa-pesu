@@ -2,13 +2,16 @@
 import React, { useState } from "react";
 import SearchInput from "../common/search-input";
 
-const SearchUser = () => {
-  const [searchUser, setSearchUser] = useState("");
+type SearchInputProps = {
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+};
+const SearchUser = ({ search, setSearch }: SearchInputProps) => {
   return (
     <SearchInput
       placeholder="Cari Petugas..."
-      onChange={setSearchUser}
-      value={searchUser}
+      onChange={setSearch}
+      value={search}
     />
   );
 };
