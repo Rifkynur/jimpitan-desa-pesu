@@ -1,15 +1,19 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SelectComponent } from "./select-component";
 
 const FilterYear = () => {
   const [selectedYear, setSelectedYear] = useState("");
-  const Options = [
-    { label: "2022", value: 2022 },
-    { label: "2023", value: 2023 },
-    { label: "2024", value: 2024 },
-    { label: "2025", value: 2025 },
-  ];
+
+  const currentYear = new Date().getFullYear();
+
+  const Options = Array.from({ length: currentYear - 2020 + 1 }, (_, i) => {
+    const year = 2020 + i;
+    return {
+      label: year.toString(),
+      value: year,
+    };
+  });
   return (
     <>
       <SelectComponent

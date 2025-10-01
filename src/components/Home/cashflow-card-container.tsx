@@ -57,7 +57,7 @@ const CashflowCardContainer = () => {
                 key={i}
                 color={data.color}
                 icon={data.icon}
-                title="Pemasukan"
+                title={data.title}
                 amount={data.amount}
               />
             );

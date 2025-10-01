@@ -6,7 +6,7 @@ type SearchInputProps = {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
 };
-const SearchUser = ({ search, setSearch }: SearchInputProps) => {
+const SearchComponent = ({ search, setSearch }: SearchInputProps) => {
   return (
     <SearchInput
       placeholder="Cari Petugas..."
@@ -16,4 +16,4 @@ const SearchUser = ({ search, setSearch }: SearchInputProps) => {
   );
 };
 
-export default SearchUser;
+export default SearchComponent;

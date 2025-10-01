@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import UserTable from "./user-table";
-import SearchUser from "./search-user";
 import FilterSelectRt from "../common/filter-select-rt";
 import ButtonOpenModalAddUser from "./button-open-modal-add-user";
+import SearchComponent from "../common/search-component";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { user } from "@/types/user-type";
 import { useAuthStore } from "@/store/auth-store";
@@ -34,7 +34,7 @@ const UserContainer = () => {
     <div>
       <div className="mb-2 flex items-center gap-2">
         <FilterSelectRt selectedRt={selectedRt} setSelectedRt={setSelectedRt} />
-        <SearchUser search={search} setSearch={setSearch} />
+        <SearchComponent search={search} setSearch={setSearch} />
         {role == "admin" && <ButtonOpenModalAddUser onSuccess={getAllUser} />}
       </div>
       <UserTable users={users} loading={loading} onSuccess={getAllUser} />
