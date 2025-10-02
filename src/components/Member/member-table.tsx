@@ -8,7 +8,7 @@ import ModalDeleteData from "../common/modal-delete-data";
 import { members } from "@/types/members-type";
 
 type Member = {
-  id: number | string;
+  id: string;
   name: string;
   rt: string;
   status: string;
@@ -26,16 +26,16 @@ type MembertableProps = {
 // ];
 
 const MemberTable = ({ onSuccess, members }: MembertableProps) => {
-  const [id, setId] = useState<string | number>("");
+  const [id, setId] = useState<string>("");
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-  const handleOpenEditMember = (id: string | number) => {
+  const handleOpenEditMember = (id: string) => {
     setId(id);
     setOpenEditModal(true);
   };
 
-  const handleDeleteMember = (id: string | number) => {
+  const handleDeleteMember = (id: string) => {
     setId(id);
     setOpenDeleteModal(true);
   };
@@ -74,11 +74,13 @@ const MemberTable = ({ onSuccess, members }: MembertableProps) => {
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}
         onSuccess={onSuccess}
+        url="members"
       />
       <ModalEditMember
         open={openEditModal}
         setOpen={setOpenEditModal}
         id={id}
+        onSuccess={onSuccess}
       />
       <DataTable
         data={tableData}

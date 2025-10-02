@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { SelectComponent } from "../common/select-component";
+import { SelectComponent } from "./select-component";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { Rt } from "@/types/rt-type";
-import { Option } from "../common/select-component"; //type option
+import { Option } from "./select-component"; //type option
 
 type selectRtProps = {
   value: string;

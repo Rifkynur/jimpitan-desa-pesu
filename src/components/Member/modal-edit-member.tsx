@@ -14,18 +14,30 @@ import { Button } from "../ui/button";
 type modalEditMemberProps = {
   open: boolean;
   setOpen: (value: boolean) => void;
-  id?: string | number;
+  id: string;
+  onSuccess: () => void;
 };
-const ModalEditMember = ({ open = false, setOpen }: modalEditMemberProps) => {
+const ModalEditMember = ({
+  open = false,
+  setOpen,
+  id,
+  onSuccess,
+}: modalEditMemberProps) => {
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
-      <DialogContent className="bg-clr-primary">
+      <DialogContent className="bg-clr-primary border-clr-pumpkin">
         <DialogHeader>
           <DialogTitle className="mb-2 font-bold text-lg text-center">
             Ubah Data Warga
           </DialogTitle>
           <DialogDescription className="mt-2" asChild>
-            <FormEditMember />
+            <FormEditMember
+              onSuccess={() => {
+                onSuccess();
+                setOpen(false);
+              }}
+              id={id}
+            />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

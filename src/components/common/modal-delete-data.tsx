@@ -42,7 +42,7 @@ const ModalDeleteData = ({
   };
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
-      <DialogContent className="bg-clr-primary">
+      <DialogContent className="bg-clr-primary border-clr-pumpkin">
         <DialogHeader>
           <DialogTitle className="mb-2 font-bold text-lg text-center">
             Hapus Data

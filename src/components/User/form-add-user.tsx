@@ -13,7 +13,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import SelectRt from "./select-rt";
+import SelectRt from "@/components/common/select-rt-form";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";

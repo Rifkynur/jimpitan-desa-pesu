@@ -14,7 +14,6 @@ const MemberContainer = () => {
 
   const getAllMember = async () => {
     const res = await sendRequest({ url: "/members" });
-    console.log(res.data);
     setAllMember(res.data);
   };
 
@@ -26,7 +25,7 @@ const MemberContainer = () => {
       <div className="mb-2 flex items-center gap-2">
         <FilterSelectRt selectedRt={selectRt} setSelectedRt={setSelectRt} />
         <SearchMember />
-        <ButtonOpenModalAddMember />
+        <ButtonOpenModalAddMember onSuccess={getAllMember} />
       </div>
       <MemberTable onSuccess={getAllMember} members={allMember} />
     </div>

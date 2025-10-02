@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -14,28 +14,51 @@ import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import SelectStatus from "./select-status";
-import SelectRt from "../income/select-rt";
+import SelectRt from "../common/select-rt-form";
+import { useFetchApi } from "@/hooks/use-fetch-api";
+
+type FormEditMemberProps = {
+  id: string;
+  onSuccess: () => void;
+};
 
 const formSchema = z.object({
   name: z.string().min(3, {
     message: "Nama minimal 3 karakter",
   }),
-  rt_id: z.string().min(1, { message: "Rt wajib diisi" }),
-  status_id: z.string().min(1, { message: "Status warga wajib diisi" }),
+  rtId: z.string().min(1, { message: "Rt wajib diisi" }),
+  status_memberId: z.string().min(1, { message: "Status warga wajib diisi" }),
 });
-const FormEditMember = () => {
+const FormEditMember = ({ id, onSuccess }: FormEditMemberProps) => {
+  const { sendRequest, loading } = useFetchApi();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      rt_id: "",
-      status_id: "",
+      rtId: "",
+      status_memberId: "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
   }
+  useEffect(() => {
+    const getDetailUsers = async () => {
+      const memberDetail = await sendRequest({ url: `members/${id}` });
+      console.log(memberDetail);
+
+      if (memberDetail) {
+        form.reset({
+          name: memberDetail.data.name,
+          rtId: memberDetail.data.rt.id,
+          status_memberId: memberDetail.data.Status_member.id,
+        });
+      }
+    };
+    getDetailUsers();
+  }, []);
   return (
     <div>
       <Form {...form}>
@@ -57,7 +80,7 @@ const FormEditMember = () => {
 
           <FormField
             control={form.control}
-            name="rt_id"
+            name="rtId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Rt</FormLabel>
@@ -72,7 +95,7 @@ const FormEditMember = () => {
           />
           <FormField
             control={form.control}
-            name="status_id"
+            name="status_memberId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Status</FormLabel>
@@ -92,6 +115,7 @@ const FormEditMember = () => {
           <Button
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
+            disabled={loading}
           >
             Ubah
           </Button>

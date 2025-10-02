@@ -13,28 +13,46 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import SelectStatus from "./select-status";
-import SelectRt from "../income/select-rt";
+import { useFetchApi } from "@/hooks/use-fetch-api";
+import { toast } from "sonner";
+import SelectRt from "../common/select-rt-form";
 
+type FormAddMemberProps = {
+  onSuccess: () => void;
+};
 const formSchema = z.object({
   name: z.string().min(3, {
     message: "Nama minimal 3 karakter",
   }),
-  rt_id: z.string().min(1, { message: "Rt wajib diisi" }),
-  status_id: z.string().min(1, { message: "Status warga wajib diisi" }),
+  rtId: z.string().min(1, { message: "Rt wajib diisi" }),
 });
-const FormAddMember = () => {
+
+const FormAddMember = ({ onSuccess }: FormAddMemberProps) => {
+  const { sendRequest, loading } = useFetchApi();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      rt_id: "",
-      status_id: "",
+      rtId: "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const addMember = async () => {
+      const handleAddMember = await sendRequest({
+        url: "members",
+        method: "post",
+        data: values,
+      });
+      if (handleAddMember) {
+        toast.success("Berhasil Menambah Warga Baru");
+        onSuccess();
+      } else {
+        toast.error("Gagal Menambah Warga Baru");
+      }
+    };
+    addMember();
   }
   return (
     <div>
@@ -57,7 +75,7 @@ const FormAddMember = () => {
 
           <FormField
             control={form.control}
-            name="rt_id"
+            name="rtId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Rt</FormLabel>
@@ -70,28 +88,11 @@ const FormAddMember = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="status_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <div className="relative">
-                  <FormControl>
-                    <SelectStatus
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
-                  </FormControl>
-                </div>
-                <FormMessage className="text-left" />
-              </FormItem>
-            )}
-          />
 
           <Button
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
+            disabled={loading}
           >
             Tambah
           </Button>
