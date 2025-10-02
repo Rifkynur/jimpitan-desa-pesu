@@ -31,7 +31,13 @@ const ModalEditUser = ({
             Ubah Data Petugas
           </DialogTitle>
           <DialogDescription className="mt-2" asChild>
-            <FormEditUser onSuccess={onSuccess} id={id} />
+            <FormEditUser
+              onSuccess={() => {
+                onSuccess();
+                setOpen(false);
+              }}
+              id={id}
+            />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

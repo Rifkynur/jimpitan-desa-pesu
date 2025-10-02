@@ -16,6 +16,7 @@ import { Input } from "../ui/input";
 import SelectRt from "./select-rt";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
 
 type FormEditUserProps = {
   onSuccess: () => void;
@@ -27,7 +28,7 @@ const formSchema = z.object({
     message: "Nama minimal 3 karakter",
   }),
   rtId: z.string().min(1, { message: "Rt wajib diisi" }),
-  password: z.string(),
+  password: z.string().optional(),
 });
 const FormEditUser = ({ onSuccess, id }: FormEditUserProps) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,11 +38,25 @@ const FormEditUser = ({ onSuccess, id }: FormEditUserProps) => {
     defaultValues: {
       username: "",
       rtId: "",
+      password: "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const updatedUser = async () => {
+      const res = await sendRequest({
+        url: `users/${id}`,
+        method: "patch",
+        data: values,
+      });
+      if (res) {
+        toast.success("Berhasil Mengubah Petugas Baru");
+        onSuccess();
+      } else {
+        toast.error("Gagal Mengubah Petugas Baru");
+      }
+    };
+    updatedUser();
   }
 
   useEffect(() => {
@@ -125,6 +140,7 @@ const FormEditUser = ({ onSuccess, id }: FormEditUserProps) => {
           <Button
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
+            disabled={loading}
           >
             Ubah
           </Button>
