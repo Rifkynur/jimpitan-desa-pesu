@@ -19,6 +19,7 @@ import { useFetchApi } from "@/hooks/use-fetch-api";
 import { useAuthStore } from "@/store/auth-store";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { log } from "console";
 
 const formSchema = z.object({
   username: z.string().min(3, {
@@ -53,9 +54,11 @@ const CardLogin = () => {
       if (datas) {
         toast.success("Berhasil login");
         router.push("/");
-        login(datas?.userData?.role?.name);
+        await login(datas?.userData?.role?.name);
       } else {
-        toast.error(error);
+        console.log(error);
+
+        toast.error(error || "username/password yang anda masukan salah");
       }
 
       form.reset();
