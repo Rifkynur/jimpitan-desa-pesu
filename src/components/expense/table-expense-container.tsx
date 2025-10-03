@@ -2,35 +2,26 @@
 import React, { useState } from "react";
 import TableExpense from "./table-expense";
 import { DataTable } from "../common/table-component";
-import { log } from "console";
 import ModalDeleteData from "../common/modal-delete-data";
 import ModalEditExpense from "./modal-edit-expense";
+import { expense } from "@/types/expense-type";
+import { formatDate } from "@/app/utils/date-formatted";
+import SpinnerLoader from "../common/spiner-loading";
+import { PaginationComponent } from "../common/pagination-component";
 
-const TableExpenseContainer = () => {
-  const [id, setId] = useState<string | number>("");
+type TableExpenseContainerProps = {
+  onSuccess: () => void;
+  expense: expense;
+  loading: boolean;
+};
+const TableExpenseContainer = ({
+  expense,
+  onSuccess,
+  loading,
+}: TableExpenseContainerProps) => {
+  const [id, setId] = useState<string>("");
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-
-  const dataDummmy = [
-    {
-      id: 1,
-      date: "12 juli 2022",
-      amount: 20000,
-      description: "Pembelian lampu",
-    },
-    {
-      id: 2,
-      date: "12 juli 2022",
-      amount: 20000,
-      description: "Pembelian lampu",
-    },
-    {
-      id: 3,
-      date: "12 juli 2022",
-      amount: 20000,
-      description: "Pembelian lampu",
-    },
-  ];
 
   const column = [
     {
@@ -47,12 +38,19 @@ const TableExpenseContainer = () => {
     },
   ];
 
-  const handleDeleteExpense = (id: string | number) => {
+  const formatedExpense = expense.data.map((data) => ({
+    id: data.id,
+    date: formatDate(data.date),
+    amount: data.amount,
+    description: data.desc,
+  }));
+
+  const handleDeleteExpense = (id: string) => {
     setId(id);
     setOpenDeleteModal(true);
   };
 
-  const handleEditExpense = (id: string | number) => {
+  const handleEditExpense = (id: string) => {
     setId(id);
     setOpenEditModal(true);
   };
@@ -62,19 +60,30 @@ const TableExpenseContainer = () => {
         id={id}
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}
+        onSuccess={onSuccess}
       />
       <ModalEditExpense
         open={openEditModal}
         setOpen={setOpenEditModal}
         id={id}
       />
-      <DataTable
-        columns={column}
-        data={dataDummmy}
-        showActions
-        onDelete={handleDeleteExpense}
-        onEdit={handleEditExpense}
-      />
+      {loading ? (
+        <SpinnerLoader />
+      ) : (
+        <>
+          <DataTable
+            columns={column}
+            data={formatedExpense}
+            showActions
+            onDelete={handleDeleteExpense}
+            onEdit={handleEditExpense}
+          />
+          <PaginationComponent
+            page={expense.page}
+            totalPage={expense.totalPage}
+          />
+        </>
+      )}
     </>
   );
 };
