@@ -13,11 +13,17 @@ type TableExpenseContainerProps = {
   onSuccess: () => void;
   expense: expense;
   loading: boolean;
+  page: number;
+  totalPage: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 };
 const TableExpenseContainer = ({
   expense,
   onSuccess,
   loading,
+  setPage,
+  page,
+  totalPage,
 }: TableExpenseContainerProps) => {
   const [id, setId] = useState<string>("");
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -61,6 +67,7 @@ const TableExpenseContainer = ({
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}
         onSuccess={onSuccess}
+        url="expense"
       />
       <ModalEditExpense
         open={openEditModal}
@@ -79,8 +86,9 @@ const TableExpenseContainer = ({
             onEdit={handleEditExpense}
           />
           <PaginationComponent
-            page={expense.page}
-            totalPage={expense.totalPage}
+            page={page}
+            totalPage={totalPage}
+            setPage={setPage}
           />
         </>
       )}

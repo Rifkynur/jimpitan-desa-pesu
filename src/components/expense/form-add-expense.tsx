@@ -23,27 +23,55 @@ import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useFetchApi } from "@/hooks/use-fetch-api";
+import { toast } from "sonner";
+
+type FormAddExpenseProps = {
+  onSuccess: () => void;
+};
 
 const formSchema = z.object({
-  amount: z.number().min(1, { message: "Jumlah Pengeluaran wajib diisi" }),
-  description: z.string().min(1, { message: "Keterangan wajib diisi" }),
+  amount: z
+    .string()
+    .regex(/^\d+$/, { message: "Hanya boleh angka" })
+    .min(1, { message: "Jumlah Pengeluaran wajib diisi" }),
+  desc: z.string().min(1, { message: "Keterangan wajib diisi" }),
   date: z.date().refine((val) => !!val, {
     message: "Tanggal wajib diisi",
   }),
 });
-const FormAddExpense = () => {
+const FormAddExpense = ({ onSuccess }: FormAddExpenseProps) => {
   const [openCalendar, setOpenCalendar] = useState(false);
+  const { sendRequest, loading } = useFetchApi();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: 0,
-      description: "",
+      amount: "",
+      desc: "",
       date: new Date(),
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    const payload = {
+      ...values,
+      amount: Number(values.amount),
+    };
+    const addExpense = async () => {
+      const res = await sendRequest({
+        url: "/expense",
+        method: "post",
+        data: payload,
+      });
+      if (res) {
+        toast.success("Berhasil Menambah Warga Baru");
+        onSuccess();
+      } else {
+        toast.error("Gagal Menambah Warga Baru");
+      }
+    };
+    addExpense();
   }
   return (
     <div>
@@ -61,8 +89,7 @@ const FormAddExpense = () => {
                     <Input
                       placeholder="Masukkan Jumlah Pengeluaran"
                       {...field}
-                      type="number"
-                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      onChange={(e) => field.onChange(e.target.value)}
                     />
                   </FormControl>
                 </div>
@@ -72,7 +99,7 @@ const FormAddExpense = () => {
           />
           <FormField
             control={form.control}
-            name="description"
+            name="desc"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Keterangan</FormLabel>
@@ -138,6 +165,7 @@ const FormAddExpense = () => {
           <Button
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
+            disabled={loading}
           >
             Tambah
           </Button>
