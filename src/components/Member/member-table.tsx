@@ -6,6 +6,9 @@ import { Badge } from "../ui/badge";
 import ModalEditMember from "./modal-edit-member";
 import ModalDeleteData from "../common/modal-delete-data";
 import { members } from "@/types/members-type";
+import SpinnerLoader from "../common/spiner-loading";
+import { useAuthStore } from "@/store/auth-store";
+import { allMembers } from "@/types/members-type";
 
 type Member = {
   id: string;
@@ -16,19 +19,26 @@ type Member = {
 
 type MembertableProps = {
   onSuccess: () => void;
-  members: members[];
+  members: allMembers;
+  loading: boolean;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  page: number;
+  totalPage: number;
 };
 
-// const dummyData: Member[] = [
-//   { id: 1, name: "Waluyo", rt: "Rt 09", status: "active" },
-//   { id: 2, name: "Hardino", rt: "Rt 09", status: "active" },
-//   { id: 3, name: "Wahyuni", rt: "Rt 09", status: "inactive" },
-// ];
-
-const MemberTable = ({ onSuccess, members }: MembertableProps) => {
+const MemberTable = ({
+  onSuccess,
+  members,
+  loading,
+  setPage,
+  page,
+  totalPage,
+}: MembertableProps) => {
   const [id, setId] = useState<string>("");
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+  const { isLoggedIn } = useAuthStore();
 
   const handleOpenEditMember = (id: string) => {
     setId(id);
@@ -61,7 +71,7 @@ const MemberTable = ({ onSuccess, members }: MembertableProps) => {
     },
   ];
 
-  const tableData = members.map((data, i) => ({
+  const tableData = members?.data?.map((data, i) => ({
     id: data.id,
     name: data.name,
     rt: data.rt.name,
@@ -82,14 +92,24 @@ const MemberTable = ({ onSuccess, members }: MembertableProps) => {
         id={id}
         onSuccess={onSuccess}
       />
-      <DataTable
-        data={tableData}
-        columns={column}
-        showActions
-        onEdit={handleOpenEditMember}
-        onDelete={handleDeleteMember}
-      />
-      <PaginationComponent />
+      {loading ? (
+        <SpinnerLoader />
+      ) : (
+        <>
+          <DataTable
+            data={tableData}
+            columns={column}
+            showActions={isLoggedIn}
+            onEdit={handleOpenEditMember}
+            onDelete={handleDeleteMember}
+          />
+          <PaginationComponent
+            page={page}
+            setPage={setPage}
+            totalPage={totalPage}
+          />
+        </>
+      )}
     </div>
   );
 };

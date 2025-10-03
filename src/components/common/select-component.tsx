@@ -18,14 +18,10 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-
-export type Option = {
-  value: any;
-  label: string;
-};
+import { SelectOption } from "@/types/select-option-type";
 
 type SearchableSelectProps = {
-  options: Option[];
+  options: SelectOption[];
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;

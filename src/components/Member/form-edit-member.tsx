@@ -16,6 +16,7 @@ import { Input } from "../ui/input";
 import SelectStatus from "./select-status";
 import SelectRt from "../common/select-rt-form";
 import { useFetchApi } from "@/hooks/use-fetch-api";
+import { toast } from "sonner";
 
 type FormEditMemberProps = {
   id: string;
@@ -43,6 +44,20 @@ const FormEditMember = ({ id, onSuccess }: FormEditMemberProps) => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    const updateMember = async () => {
+      const res = await sendRequest({
+        url: `members/${id}`,
+        method: "patch",
+        data: values,
+      });
+      if (res) {
+        toast.success("Berhasil Mengubah Data Warga");
+        onSuccess();
+      } else {
+        toast.error("Gagal Mengubah data Warga");
+      }
+    };
+    updateMember();
   }
   useEffect(() => {
     const getDetailUsers = async () => {

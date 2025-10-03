@@ -3,14 +3,14 @@ import React, { useState, useEffect } from "react";
 import { SelectComponent } from "./select-component";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { Rt } from "@/types/rt-type";
-import { Option } from "./select-component"; //type option
+import { SelectOption } from "@/types/select-option-type";
 
 type selectRtProps = {
   value: string;
   onChange: (value: string) => void;
 };
 const SelectRt = ({ onChange, value }: selectRtProps) => {
-  const [allRt, SetAllRt] = useState<Option[]>([]);
+  const [allRt, SetAllRt] = useState<SelectOption[]>([]);
 
   const { sendRequest } = useFetchApi();
   useEffect(() => {
