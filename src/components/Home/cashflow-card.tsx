@@ -37,7 +37,7 @@ const CashflowCard = ({
           <div className="flex flex-col justify-between h-full w-full">
             <p className="font-bold text-lg">Total {title}</p>
             <div className="w-full h-1 bg-red-50 rounded-2xl"></div>
-            <p className="font-semibold">Rp.{amount}</p>
+            <p className="font-semibold">Rp.{amount.toLocaleString("id-ID")}</p>
           </div>
         </>
       </CardContent>

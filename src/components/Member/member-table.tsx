@@ -85,6 +85,7 @@ const MemberTable = ({
         setOpen={setOpenDeleteModal}
         onSuccess={onSuccess}
         url="members"
+        loading={loading}
       />
       <ModalEditMember
         open={openEditModal}

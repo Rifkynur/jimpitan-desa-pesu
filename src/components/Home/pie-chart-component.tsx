@@ -40,38 +40,38 @@ export function PieChartComponent({ data }: PieChartComponnetProps) {
   } satisfies ChartConfig;
   return (
     <Card className="flex flex-col bg-card-background border-clr-pumpkin  lg:col-span-4">
-      <CardContent className="flex-1 pb-0">
-        {chartData.length > 0 ? (
-          <ChartContainer
-            config={chartConfig}
-            className="[&_.recharts-text]:fill-background mx-auto aspect-square max-h-[850px]"
-          >
-            <PieChart>
-              <ChartTooltip cursor={false} content={<CustomTooltip />} />
-              <Pie data={chartData} dataKey="income">
-                <LabelList
-                  dataKey="rt"
-                  className="fill-background"
-                  stroke="none"
-                  fontSize={12}
-                  formatter={(value: keyof typeof chartConfig) =>
-                    chartConfig[value]?.label
-                  }
-                />
-              </Pie>
-            </PieChart>
-          </ChartContainer>
-        ) : (
-          <p className="text-clr-silver text-center py-8">
-            Data Tidak Tersedia
-          </p>
-        )}
-      </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium text-clr-silver-v1 text-lg">
-          Total Pemasukan per Rt
-        </div>
-      </CardFooter>
+      {chartData.length > 0 ? (
+        <>
+          <CardContent className="flex-1 pb-0">
+            <ChartContainer
+              config={chartConfig}
+              className="[&_.recharts-text]:fill-background mx-auto aspect-square max-h-[850px]"
+            >
+              <PieChart>
+                <ChartTooltip cursor={false} content={<CustomTooltip />} />
+                <Pie data={chartData} dataKey="income">
+                  <LabelList
+                    dataKey="rt"
+                    className="fill-background"
+                    stroke="none"
+                    fontSize={12}
+                    formatter={(value: keyof typeof chartConfig) =>
+                      chartConfig[value]?.label
+                    }
+                  />
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter className="flex-col gap-2 text-sm">
+            <div className="flex items-center gap-2 leading-none font-medium text-clr-silver-v1 text-lg">
+              Total Pemasukan per Rt
+            </div>
+          </CardFooter>
+        </>
+      ) : (
+        <p className="text-clr-silver text-center py-8">Data Tidak Tersedia</p>
+      )}
     </Card>
   );
 }

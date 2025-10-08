@@ -68,6 +68,7 @@ const TableExpenseContainer = ({
         setOpen={setOpenDeleteModal}
         onSuccess={onSuccess}
         url="expense"
+        loading={loading}
       />
       <ModalEditExpense
         open={openEditModal}

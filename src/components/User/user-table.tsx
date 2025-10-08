@@ -9,7 +9,7 @@ import { useAuthStore } from "@/store/auth-store";
 
 type UserTableProps = {
   users: user[];
-  loading?: boolean;
+  loading: boolean;
   onSuccess: () => void;
 };
 
@@ -51,6 +51,7 @@ const UserTable = ({ users, loading, onSuccess }: UserTableProps) => {
         setOpen={setOpenDeleteModal}
         url="users"
         onSuccess={onSuccess}
+        loading={loading}
       />
       <ModalEditUser
         open={openEditModal}

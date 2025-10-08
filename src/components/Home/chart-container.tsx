@@ -10,7 +10,7 @@ import SpinnerLoader from "../common/spiner-loading";
 import { BarChartType } from "@/types/bar-chart-type";
 
 const ChartContainer = () => {
-  const [selectedRt, setSelectedRt] = useState<string | number>(
+  const [selectedRt, setSelectedRt] = useState<string>(
     "f7d8c89f-7342-4779-bf39-40a6a8adb483"
   );
   const [selectedYear, setSelectedYear] = useState<string | number>(2025);

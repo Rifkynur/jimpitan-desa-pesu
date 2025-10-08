@@ -5,40 +5,42 @@ import TableCashflow from "../common/table-income";
 import ModalDeleteData from "../common/modal-delete-data";
 import ModalEditIncome from "./modal-edit-income";
 import TableIncome from "../common/table-income";
+import { GetIncomeResponse } from "@/types/income-type";
+import { formatDate } from "@/app/utils/date-formatted";
 
-const IncomeTable = () => {
+type IncomeTableProps = {
+  page: number;
+  totalPage: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  dataDetailIncome: GetIncomeResponse;
+  loading: boolean;
+  onSuccess: () => void;
+};
+
+const IncomeTable = ({
+  page,
+  totalPage,
+  setPage,
+  dataDetailIncome,
+  loading,
+  onSuccess,
+}: IncomeTableProps) => {
   const [id, setId] = useState<string | number>("");
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const data = [
-    {
-      name: "Warga 1",
-      values: [
-        { id: "01", amount: "Rp.1500" },
-        { id: "02", amount: "Rp.1500" },
-        { id: "03", amount: "Rp.1500" },
-        { id: "04", amount: "Rp.1500" },
-      ],
-    },
-    {
-      name: "Warga 2",
-      values: [
-        { id: "1", amount: "Rp.1500" },
-        { id: "2", amount: "Rp.1500" },
-        { id: "3", amount: "Rp.1500" },
-        { id: "4", amount: "Rp.1500" },
-      ],
-    },
-    {
-      name: "Warga 2",
-      values: [
-        { id: "11", amount: "Rp.1500" },
-        { id: "12", amount: "Rp.1500" },
-        { id: "13", amount: "Rp.1500" },
-        { id: "14", amount: "Rp.1500" },
-      ],
-    },
-  ];
+
+  const formattedData = dataDetailIncome.data.flatMap((rtGroup) =>
+    rtGroup.members.map((member) => ({
+      name: member.name,
+      values: Object.entries(member.weeklyAmounts).flatMap(([date, amounts]) =>
+        amounts.map((a) => ({
+          id: a.id,
+          amount: `Rp.${a.amount.toLocaleString("id-ID")}`,
+          date: formatDate(date),
+        }))
+      ),
+    }))
+  );
 
   const handleDeleteIncome = (id: string | number) => {
     setId(id);
@@ -56,6 +58,9 @@ const IncomeTable = () => {
         id={id}
         setOpen={setOpenDeleteModal}
         open={openDeleteModal}
+        loading={loading}
+        onSuccess={onSuccess}
+        url="income"
       />
       <ModalEditIncome
         open={openEditModal}
@@ -64,11 +69,15 @@ const IncomeTable = () => {
       />
       <div className="flex flex-col">
         <TableIncome
-          data={data}
+          data={formattedData}
           onDelete={handleDeleteIncome}
           onEdit={handleEditIncome}
         />
-        <PaginationComponent />
+        <PaginationComponent
+          page={page}
+          totalPage={totalPage}
+          setPage={setPage}
+        />
       </div>
     </>
   );

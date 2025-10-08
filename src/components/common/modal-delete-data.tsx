@@ -17,6 +17,7 @@ type modalDeleteData = {
   setOpen: (value: boolean) => void;
   url?: string;
   onSuccess: () => void;
+  loading: boolean;
 };
 
 const ModalDeleteData = ({
@@ -25,6 +26,7 @@ const ModalDeleteData = ({
   setOpen,
   url,
   onSuccess,
+  loading,
 }: modalDeleteData) => {
   const { sendRequest } = useFetchApi();
   const deleteData = async () => {
@@ -55,6 +57,7 @@ const ModalDeleteData = ({
                 <Button
                   className="bg-clr-pumpkin cursor-pointer font-bold hover:bg-orange-500"
                   onClick={deleteData}
+                  disabled={loading}
                 >
                   Yakin
                 </Button>

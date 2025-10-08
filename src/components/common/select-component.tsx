@@ -23,7 +23,7 @@ import { SelectOption } from "@/types/select-option-type";
 type SearchableSelectProps = {
   options: SelectOption[];
   value: number | string;
-  onChange: React.Dispatch<React.SetStateAction<number | string>>;
+  onChange: React.Dispatch<React.SetStateAction<string>>;
   placeholder?: string;
   className?: string;
 };

@@ -40,29 +40,35 @@ export function BarChartComponent({ data, loading }: BarChartComponentProps) {
   } satisfies ChartConfig;
   return (
     <Card className="bg-card-background border-clr-pumpkin w-full lg:col-span-8">
-      <CardContent>
-        {!loading && (
-          <ChartContainer config={chartConfig}>
-            <BarChart accessibilityLayer data={chartData}>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="month"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value) => value.slice(0, 3)}
-              />
-              <ChartTooltip cursor={false} content={<CustomTooltip />} />
-              <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
-            </BarChart>
-          </ChartContainer>
-        )}
-      </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="leading-none text-clr-silver font-medium mx-auto lg:text-lg">
-          Menampilkan total Pemasukan Perbulan
-        </div>
-      </CardFooter>
+      {!loading && chartData.length > 0 ? (
+        <>
+          <CardContent>
+            <ChartContainer config={chartConfig}>
+              <BarChart accessibilityLayer data={chartData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  tickFormatter={(value) => value.slice(0, 3)}
+                />
+                <ChartTooltip cursor={false} content={<CustomTooltip />} />
+                <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter className="flex-col items-start gap-2 text-sm">
+            <div className="leading-none text-clr-silver font-medium mx-auto lg:text-lg">
+              Menampilkan total Pemasukan Perbulan
+            </div>
+          </CardFooter>
+        </>
+      ) : (
+        <p className="py-8 text-center text-clr-silver font-bold">
+          Data Tidak Tersedia
+        </p>
+      )}
     </Card>
   );
 }
