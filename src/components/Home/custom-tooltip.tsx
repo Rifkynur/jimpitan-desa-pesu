@@ -56,7 +56,9 @@ export function CustomTooltip({
                 />
               )}
               <span className="font-medium text-white">{labelName}:</span>
-              <span className="ml-1 text-white">Rp. {value}</span>
+              <span className="ml-1 text-white">
+                Rp.{value.toLocaleString("id-ID")}
+              </span>
             </li>
           );
         })}

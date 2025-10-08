@@ -1,8 +1,9 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import FilterSelectRt from "../common/filter-select-rt";
 import FilterYear from "../common/filter-year";
-import IncomeTable from "./income-table";
 import ButtonModalAddIncome from "./button-modal-add-income";
+import TabIncomeTable from "./tab-income-table";
 
 type Income = {};
 const IncomeContainer = () => {
@@ -13,7 +14,7 @@ const IncomeContainer = () => {
         <FilterYear />
         <ButtonModalAddIncome />
       </div>
-      <IncomeTable />
+      <TabIncomeTable />
     </div>
   );
 };

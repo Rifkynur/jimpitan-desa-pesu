@@ -6,11 +6,16 @@ import { Rt } from "@/types/rt-type";
 import { SelectOption } from "@/types/select-option-type";
 
 type FilterSelectRtProps = {
-  selectedRt: string;
-  setSelectedRt: React.Dispatch<React.SetStateAction<string>>;
+  selectedRt: string | number;
+  setSelectedRt: React.Dispatch<React.SetStateAction<string | number>>;
+  isChart?: boolean;
 };
 
-const FilterSelectRt = ({ selectedRt, setSelectedRt }: FilterSelectRtProps) => {
+const FilterSelectRt = ({
+  selectedRt,
+  setSelectedRt,
+  isChart = false,
+}: FilterSelectRtProps) => {
   const { sendRequest } = useFetchApi();
   const [optionRt, setOptionRt] = useState<SelectOption[]>([]);
 
@@ -25,7 +30,12 @@ const FilterSelectRt = ({ selectedRt, setSelectedRt }: FilterSelectRtProps) => {
           label: `Rt : ${data.name}`,
         })),
       ];
-      setOptionRt(formatedOption);
+      const formatedIsChart = allRt.allRt.map((data: Rt) => ({
+        value: data.id,
+        label: `Rt : ${data.name}`,
+      }));
+      const filteredOption = isChart ? formatedIsChart : formatedOption;
+      setOptionRt(filteredOption);
     };
     getAllRt();
   }, []);

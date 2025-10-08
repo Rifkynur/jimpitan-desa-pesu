@@ -5,11 +5,22 @@ import { SelectComponent } from "./select-component";
 type FilterYearProps = {
   year: number | string;
   setYear: React.Dispatch<React.SetStateAction<number | string>>;
+  isChart?: boolean;
 };
-const FilterYear = ({ year, setYear }: FilterYearProps) => {
+const FilterYear = ({ year, setYear, isChart = false }: FilterYearProps) => {
   const currentYear = new Date().getFullYear();
 
-  const Options = [
+  const chartOptions = Array.from(
+    { length: currentYear - 2020 + 1 },
+    (_, i) => {
+      const year = 2020 + i;
+      return {
+        label: year.toString(),
+        value: year,
+      };
+    }
+  );
+  const normalOptions = [
     { label: "All", value: "all" },
     ...Array.from({ length: currentYear - 2020 + 1 }, (_, i) => {
       const year = 2020 + i;
@@ -19,6 +30,7 @@ const FilterYear = ({ year, setYear }: FilterYearProps) => {
       };
     }),
   ];
+  const Options = isChart ? chartOptions : normalOptions;
   return (
     <>
       <SelectComponent

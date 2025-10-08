@@ -18,51 +18,45 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { CustomTooltip } from "./custom-tooltip";
+import { BarChartType } from "@/types/bar-chart-type";
 
 export const description = "A bar chart";
 
-const chartData = [
-  { month: "Januari", desktop: 180000 },
-  { month: "Februari", desktop: 200000 },
-  { month: "Maret", desktop: 230000 },
-  { month: "April", desktop: 130000 },
-  { month: "Mai", desktop: 190000 },
-  { month: "April", desktop: 140000 },
-  { month: "Mei", desktop: 210000 },
-  { month: "Juni", desktop: 180000 },
-  { month: "Juli", desktop: 130000 },
-  { month: "Agustus", desktop: 170000 },
-  { month: "September", desktop: 200000 },
-  { month: "Oktober", desktop: 130000 },
-  { month: "November", desktop: 165000 },
-  { month: "Desember", desktop: 210000 },
-];
+type BarChartComponentProps = {
+  data: BarChartType[];
+  loading: boolean;
+};
 
-const chartConfig = {
-  desktop: {
-    label: "Pemasukan Rp:",
-    color: "var(--chart-1)",
-  },
-} satisfies ChartConfig;
-
-export function BarChartComponent() {
+export function BarChartComponent({ data, loading }: BarChartComponentProps) {
+  const chartData = data.map((dat, i) => ({
+    month: dat.month,
+    desktop: dat.total,
+  }));
+  const chartConfig = {
+    desktop: {
+      label: "Pemasukan Rp:",
+      color: "var(--chart-1)",
+    },
+  } satisfies ChartConfig;
   return (
     <Card className="bg-card-background border-clr-pumpkin w-full lg:col-span-8">
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip cursor={false} content={<CustomTooltip />} />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
-          </BarChart>
-        </ChartContainer>
+        {!loading && (
+          <ChartContainer config={chartConfig}>
+            <BarChart accessibilityLayer data={chartData}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) => value.slice(0, 3)}
+              />
+              <ChartTooltip cursor={false} content={<CustomTooltip />} />
+              <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+            </BarChart>
+          </ChartContainer>
+        )}
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="leading-none text-clr-silver font-medium mx-auto lg:text-lg">
