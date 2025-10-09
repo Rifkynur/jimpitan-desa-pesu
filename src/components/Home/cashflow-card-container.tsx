@@ -15,7 +15,7 @@ const CashflowCardContainer = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const getData = await sendRequest({ url: "/allData" });
+        const getData = await sendRequest({ url: "allData" });
         const coloredData = [
           {
             title: "Pemasukan",

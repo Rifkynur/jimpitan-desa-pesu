@@ -25,7 +25,7 @@ const ChartContainer = () => {
   // untuk pieChart
   const getTotalPerRtPerYear = async () => {
     const res = await sendRequest({
-      url: "/incomePerMonth",
+      url: "incomePerMonth",
       params: { year: selectedYear && selectedYear },
     });
     setTotalDataPerRtPerYear(res.data);
@@ -33,7 +33,7 @@ const ChartContainer = () => {
 
   const getTotalMonthlyPerYear = async () => {
     const res = await sendRequest({
-      url: "/totalIncomeMonthlyPerRtPeryearPerRt",
+      url: "totalIncomeMonthlyPerRtPeryearPerRt",
       params: {
         year: selectedYear && selectedYear,
         rtId: selectedRt && selectedRt,

@@ -28,7 +28,7 @@ const IncomeContainer = () => {
 
   const getDetailIncome = async () => {
     const res = await sendRequest({
-      url: "/income",
+      url: "income",
       params: {
         page: page && page,
         rtId: selectedRt && selectedRt,
@@ -42,7 +42,7 @@ const IncomeContainer = () => {
 
   const getTotalIncome = async () => {
     const res = await sendRequest({
-      url: "/total-income",
+      url: "total-income",
       params: {
         year: selectedYear && selectedYear,
         rtId: selectedRt && selectedRt,

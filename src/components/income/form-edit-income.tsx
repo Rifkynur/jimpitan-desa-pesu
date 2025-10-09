@@ -60,7 +60,7 @@ const FormEditIncome = ({ id, onSuccess }: FormEditIncomeProps) => {
     };
     const addIncome = async () => {
       const res = await sendRequest({
-        url: `/income/${id}`,
+        url: `income/${id}`,
         method: "patch",
         data: payload,
       });

@@ -59,7 +59,7 @@ const FormAddExpense = ({ onSuccess }: FormAddExpenseProps) => {
     };
     const addExpense = async () => {
       const res = await sendRequest({
-        url: "/expense",
+        url: "expense",
         method: "post",
         data: payload,
       });

@@ -22,7 +22,7 @@ const ExpenseContainer = () => {
 
   const getAllExpense = async () => {
     const res = await sendRequest({
-      url: "/expense",
+      url: "expense",
       params: { page: page && page, year: year && year },
     });
     setPage(res.page);

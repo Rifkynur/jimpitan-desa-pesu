@@ -23,7 +23,7 @@ const FilterSelectStatusMember = ({
 
   useEffect(() => {
     const getAllStatusMember = async () => {
-      const allStatus = await sendRequest({ url: "/members/status" });
+      const allStatus = await sendRequest({ url: "members/status" });
       console.log(allStatus);
 
       const formatedOption: SelectOption[] = [

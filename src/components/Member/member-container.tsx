@@ -30,7 +30,7 @@ const MemberContainer = () => {
 
   const getAllMember = async () => {
     const res = await sendRequest({
-      url: "/members",
+      url: "members",
       params: {
         rtId: selectedRt && selectedRt,
         search: value && value,

@@ -21,7 +21,7 @@ const FilterSelectRt = ({
 
   useEffect(() => {
     const getAllRt = async () => {
-      const allRt = await sendRequest({ url: "/rt" });
+      const allRt = await sendRequest({ url: "rt" });
       const formatedOption: SelectOption[] = [
         { value: "all", label: "Semua Rt" },
 

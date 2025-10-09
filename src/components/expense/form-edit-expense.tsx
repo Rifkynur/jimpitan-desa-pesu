@@ -61,7 +61,7 @@ const FormEditExpense = ({ id, onSuccess }: FormAddExpenseProps) => {
     };
     const editExpense = async () => {
       const res = await sendRequest({
-        url: `/expense/${id}`,
+        url: `expense/${id}`,
         method: "patch",
         data: payload,
       });
