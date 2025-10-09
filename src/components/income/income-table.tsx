@@ -66,6 +66,7 @@ const IncomeTable = ({
         open={openEditModal}
         id={id}
         setOpen={setOpenEditModal}
+        onSuccess={onSuccess}
       />
       <div className="flex flex-col">
         <TableIncome

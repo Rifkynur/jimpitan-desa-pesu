@@ -14,9 +14,15 @@ type ModalEditIncomeProps = {
   open: boolean;
   setOpen: (value: boolean) => void;
   id: string;
+  onSuccess: () => void;
 };
 
-const ModalEditExpense = ({ open = false, setOpen }: ModalEditIncomeProps) => {
+const ModalEditExpense = ({
+  open = false,
+  setOpen,
+  id,
+  onSuccess,
+}: ModalEditIncomeProps) => {
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
       <DialogContent className="bg-clr-primary border-clr-pumpkin">
@@ -25,7 +31,13 @@ const ModalEditExpense = ({ open = false, setOpen }: ModalEditIncomeProps) => {
             Ubah Data Pengeluaran
           </DialogTitle>
           <DialogDescription className="mt-2" asChild>
-            <FormEditExpense />
+            <FormEditExpense
+              id={id}
+              onSuccess={() => {
+                setOpen(false);
+                onSuccess();
+              }}
+            />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

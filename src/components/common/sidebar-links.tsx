@@ -40,7 +40,7 @@ export function SidebarLinks() {
     { href: "/expense", label: "Pengeluaran", icon: Wallet },
     { href: "/schedule", label: "Jadwal", icon: CalendarDays },
     { href: "/member", label: "Warga", icon: Users },
-    { href: "/report", label: "Report", icon: ClipboardCheck },
+    // { href: "/report", label: "Report", icon: ClipboardCheck },
     { href: "/user", label: "Petugas", icon: UserRound },
   ];
 

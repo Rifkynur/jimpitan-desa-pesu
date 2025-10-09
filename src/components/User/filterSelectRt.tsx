@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { SelectComponent } from "../common/select-component";
 
 const FilterSelectRt = () => {
-  const [selectedRt, setSelectedRt] = useState("");
+  const [selectedRt, setSelectedRt] = useState<string | number>("");
 
   const options = [
     { value: "id rt 09", label: "Rt 09" },

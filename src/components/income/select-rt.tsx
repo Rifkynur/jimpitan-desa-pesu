@@ -4,7 +4,7 @@ import { SelectComponent } from "../common/select-component";
 
 type selectRtProps = {
   value: string;
-  onChange: (value: string) => void;
+  onChange: React.Dispatch<React.SetStateAction<string | number>>;
 };
 const SelectRt = ({ onChange, value }: selectRtProps) => {
   const [selected, setSelected] = useState("");

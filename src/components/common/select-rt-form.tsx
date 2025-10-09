@@ -7,7 +7,7 @@ import { SelectOption } from "@/types/select-option-type";
 
 type selectRtProps = {
   value: string;
-  onChange: (value: string) => void;
+  onChange: React.Dispatch<React.SetStateAction<string | number>>;
 };
 const SelectRt = ({ onChange, value }: selectRtProps) => {
   const [allRt, SetAllRt] = useState<SelectOption[]>([]);

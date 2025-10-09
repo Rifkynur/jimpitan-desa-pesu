@@ -68,7 +68,7 @@ const TableIncome = ({ data, onEdit, onDelete, headers }: TableIncomeProps) => {
         <TableBody>
           {data.map((row, i) => (
             <TableRow key={i}>
-              <TableCell className="sticky left-0 p-2 font-medium z-10 text-white bg-[#221c17]">
+              <TableCell className="sticky left-0 p-2 font-medium z-10 text-white capitalize bg-[#221c17]">
                 {row.name}
               </TableCell>
 

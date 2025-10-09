@@ -23,7 +23,7 @@ import { SelectOption } from "@/types/select-option-type";
 type SearchableSelectProps = {
   options: SelectOption[];
   value: number | string;
-  onChange: React.Dispatch<React.SetStateAction<string>>;
+  onChange: React.Dispatch<React.SetStateAction<string | number>>;
   placeholder?: string;
   className?: string;
 };
@@ -60,7 +60,7 @@ export function SelectComponent({
           <CommandInput placeholder="Cari..." />
           <CommandList>
             <CommandEmpty>Tidak ditemukan</CommandEmpty>
-            <CommandGroup className="text-white">
+            <CommandGroup className="text-white capitalize">
               {options.map((opt) => (
                 <CommandItem
                   key={opt.value}

@@ -6,8 +6,8 @@ import { SelectOption } from "@/types/select-option-type";
 import { status_member } from "@/types/members-type";
 
 type selectStatus = {
-  value: string;
-  onChange: (value: string) => void;
+  value: string | number;
+  onChange: React.Dispatch<React.SetStateAction<string | number>>;
 };
 const SelectStatus = ({ value, onChange }: selectStatus) => {
   const [allStatus, setAllStatus] = useState<SelectOption[]>([]);

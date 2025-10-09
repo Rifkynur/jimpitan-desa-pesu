@@ -13,8 +13,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import SelectRt from "./select-rt";
-import SelectName from "./select-name";
+import SelectMember from "../common/select-member";
 
 import {
   Popover,
@@ -25,58 +24,67 @@ import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useFetchApi } from "@/hooks/use-fetch-api";
+import { toast } from "sonner";
+
+type FormAddIncomeProps = {
+  onSuccess: () => void;
+};
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Nama wajib diisi" }),
-  rt_id: z.string().min(1, { message: "Rt wajib diisi" }),
-  amount: z.number().min(1, { message: "Jumlah wajib diisi" }),
+  memberId: z.string().min(1, { message: "Nama wajib diisi" }),
+  amount: z
+    .string()
+    .regex(/^\d+$/, { message: "Hanya boleh angka" })
+    .min(1, { message: "Jumlah Pengeluaran wajib diisi" }),
   date: z.date().refine((val) => !!val, {
     message: "Tanggal wajib diisi",
   }),
 });
-const FormAddIncome = () => {
+const FormAddIncome = ({ onSuccess }: FormAddIncomeProps) => {
   const [openCalendar, setOpenCalendar] = useState(false);
+  const { loading, sendRequest } = useFetchApi();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      rt_id: "",
-      amount: 0,
+      memberId: "",
+      amount: "",
       date: new Date(),
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const payload = {
+      ...values,
+      amount: Number(values.amount),
+    };
+    const addIncome = async () => {
+      const res = await sendRequest({
+        url: "/income",
+        method: "post",
+        data: payload,
+      });
+      if (res) {
+        toast.success("Berhasil Menambah Data Baru");
+        onSuccess();
+      } else {
+        toast.error("Gagal Menambah Data Baru");
+      }
+    };
+    addIncome();
   }
   return (
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* Username */}
           <FormField
             control={form.control}
-            name="rt_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Rt</FormLabel>
-                <div className="relative">
-                  <FormControl>
-                    <SelectRt value={field.value} onChange={field.onChange} />
-                  </FormControl>
-                </div>
-                <FormMessage className="text-left" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="name"
+            name="memberId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Nama</FormLabel>
                 <FormControl>
-                  <SelectName onChange={field.onChange} value={field.value} />
+                  <SelectMember onChange={field.onChange} value={field.value} />
                 </FormControl>
                 <FormMessage className="text-left" />
               </FormItem>
@@ -93,8 +101,7 @@ const FormAddIncome = () => {
                     <Input
                       placeholder="Masukkan Jumlah Pengeluaran"
                       {...field}
-                      type="number"
-                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      onChange={(e) => field.onChange(e.target.value)}
                     />
                   </FormControl>
                 </div>
@@ -121,7 +128,7 @@ const FormAddIncome = () => {
                         {field.value ? (
                           format(field.value, "PPP")
                         ) : (
-                          <span className="text-white">Pick a date</span>
+                          <span className="text-white">Pilih tanggal</span>
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>

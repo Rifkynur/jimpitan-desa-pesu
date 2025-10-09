@@ -74,6 +74,7 @@ const TableExpenseContainer = ({
         open={openEditModal}
         setOpen={setOpenEditModal}
         id={id}
+        onSuccess={onSuccess}
       />
       {loading ? (
         <SpinnerLoader />

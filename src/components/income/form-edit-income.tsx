@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -25,63 +25,72 @@ import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useFetchApi } from "@/hooks/use-fetch-api";
+import { toast } from "sonner";
+
+type FormEditIncomeProps = {
+  onSuccess: () => void;
+  id: string | number;
+};
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Nama wajib diisi" }),
-  amount: z.number().min(1, { message: "Jumlah diisi" }),
-  rt_id: z.string().min(1, { message: "Rt wajib diisi" }),
+  amount: z
+    .string()
+    .regex(/^\d+$/, { message: "Hanya boleh angka" })
+    .min(1, { message: "Jumlah Pengeluaran wajib diisi" }),
   date: z.date().refine((val) => !!val, {
     message: "Tanggal wajib diisi",
   }),
 });
-const FormEditIncome = () => {
+const FormEditIncome = ({ id, onSuccess }: FormEditIncomeProps) => {
   const [openCalendar, setOpenCalendar] = useState(false);
+  const { loading, sendRequest } = useFetchApi();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      amount: 0,
-      rt_id: "",
+      amount: "",
       date: new Date(),
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const payload = {
+      ...values,
+      amount: Number(values.amount),
+    };
+    const addIncome = async () => {
+      const res = await sendRequest({
+        url: `/income/${id}`,
+        method: "patch",
+        data: payload,
+      });
+      if (res) {
+        toast.success("Berhasil Mengubah Data");
+        onSuccess();
+      } else {
+        toast.error("Gagal Mengubah Data");
+      }
+    };
+    addIncome();
   }
+  useEffect(() => {
+    const getDetailUsers = async () => {
+      const incomeDetail = await sendRequest({ url: `income/${id}` });
+      console.log(incomeDetail);
+
+      if (incomeDetail) {
+        form.reset({
+          amount: incomeDetail.data.amount.toString(),
+          date: new Date(incomeDetail.data.date),
+        });
+      }
+    };
+    getDetailUsers();
+  }, []);
   return (
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* Username */}
-          <FormField
-            control={form.control}
-            name="rt_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Rt</FormLabel>
-                <div className="relative">
-                  <FormControl>
-                    <SelectRt value={field.value} onChange={field.onChange} />
-                  </FormControl>
-                </div>
-                <FormMessage className="text-left" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nama</FormLabel>
-                <FormControl>
-                  <SelectName onChange={field.onChange} value={field.value} />
-                </FormControl>
-                <FormMessage className="text-left" />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="amount"
@@ -93,8 +102,7 @@ const FormEditIncome = () => {
                     <Input
                       placeholder="Masukkan Jumlah Pengeluaran"
                       {...field}
-                      type="number"
-                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      onChange={(e) => field.onChange(e.target.value)}
                     />
                   </FormControl>
                 </div>
@@ -158,6 +166,7 @@ const FormEditIncome = () => {
           <Button
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
+            disabled={loading}
           >
             Tambah
           </Button>

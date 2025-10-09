@@ -6,8 +6,10 @@ import { SelectOption } from "@/types/select-option-type";
 import { status_member } from "@/types/members-type";
 
 type FilterSelectStatusMemberProps = {
-  selectedStatusMember: string;
-  setSelectedStatusMember: React.Dispatch<React.SetStateAction<string>>;
+  selectedStatusMember: string | number;
+  setSelectedStatusMember: React.Dispatch<
+    React.SetStateAction<string | number>
+  >;
 };
 
 const FilterSelectStatusMember = ({

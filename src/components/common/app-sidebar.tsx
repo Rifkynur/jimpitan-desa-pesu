@@ -12,12 +12,12 @@ import { usePathname } from "next/navigation";
 import { SidebarLinks } from "./sidebar-links";
 
 export function AppSidebar() {
-  const { setOpen } = useSidebar();
+  const { setOpen, setOpenMobile } = useSidebar();
   const pathname = usePathname();
 
   useEffect(() => {
     if (window.innerWidth < 768) {
-      setOpen(false);
+      setOpenMobile(false);
     }
   }, [pathname]);
   return (

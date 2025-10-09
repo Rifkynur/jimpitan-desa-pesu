@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   FormControl,
@@ -23,28 +23,72 @@ import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useFetchApi } from "@/hooks/use-fetch-api";
+import { toast } from "sonner";
+
+type FormAddExpenseProps = {
+  id: string;
+  onSuccess: () => void;
+};
 
 const formSchema = z.object({
-  amount: z.number().min(1, { message: "Jumlah Pengeluaran wajib diisi" }),
-  description: z.string().min(1, { message: "Keterangan wajib diisi" }),
+  amount: z
+    .string()
+    .regex(/^\d+$/, { message: "Hanya boleh angka" })
+    .min(1, { message: "Jumlah Pengeluaran wajib diisi" }),
+  desc: z.string().min(1, { message: "Keterangan wajib diisi" }),
   date: z.date().refine((val) => !!val, {
     message: "Tanggal wajib diisi",
   }),
 });
-const FormEditExpense = () => {
+const FormEditExpense = ({ id, onSuccess }: FormAddExpenseProps) => {
   const [openCalendar, setOpenCalendar] = useState(false);
+  const { loading, sendRequest } = useFetchApi();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: 0,
-      description: "",
+      amount: "",
+      desc: "",
       date: new Date(),
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    const payload = {
+      ...values,
+      amount: Number(values.amount),
+    };
+    const editExpense = async () => {
+      const res = await sendRequest({
+        url: `/expense/${id}`,
+        method: "patch",
+        data: payload,
+      });
+      if (res) {
+        toast.success("Berhasil Mengubah Data");
+        onSuccess();
+      } else {
+        toast.error("Gagal Mengubah Data");
+      }
+    };
+    editExpense();
   }
+  useEffect(() => {
+    const getDetailUsers = async () => {
+      const expenseDetail = await sendRequest({ url: `expense/${id}` });
+      console.log(expenseDetail);
+
+      if (expenseDetail) {
+        form.reset({
+          amount: expenseDetail.data.amount.toString(),
+          desc: expenseDetail.data.desc,
+          date: new Date(expenseDetail.data.date),
+        });
+      }
+    };
+    getDetailUsers();
+  }, []);
   return (
     <div>
       <Form {...form}>
@@ -61,8 +105,7 @@ const FormEditExpense = () => {
                     <Input
                       placeholder="Masukkan Jumlah Pengeluaran"
                       {...field}
-                      type="number"
-                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      onChange={(e) => field.onChange(e.target.value)}
                     />
                   </FormControl>
                 </div>
@@ -72,7 +115,7 @@ const FormEditExpense = () => {
           />
           <FormField
             control={form.control}
-            name="description"
+            name="desc"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Keterangan</FormLabel>
@@ -138,6 +181,7 @@ const FormEditExpense = () => {
           <Button
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
+            disabled={loading}
           >
             Tambah
           </Button>

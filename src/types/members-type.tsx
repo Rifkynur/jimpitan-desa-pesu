@@ -19,3 +19,11 @@ export type allMembers = {
   totalData: number;
   totalPage: number;
 };
+
+export type MemberForm = {
+  id: string;
+  name: string;
+  rtId: string;
+  status_memberId: string;
+  rt: Rt;
+};

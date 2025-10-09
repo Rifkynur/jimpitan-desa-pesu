@@ -12,7 +12,7 @@ import { useDebounce } from "use-debounce";
 const UserContainer = () => {
   const { sendRequest, loading } = useFetchApi();
 
-  const [selectedRt, setSelectedRt] = useState("");
+  const [selectedRt, setSelectedRt] = useState<string | number>("");
   const [search, setSearch] = useState("");
   const [value] = useDebounce(search, 500);
 

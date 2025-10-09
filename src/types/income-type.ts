@@ -24,3 +24,18 @@ export type GetIncomeResponse = {
   limit: number;
   data: RtIncomeGroup[];
 };
+
+export type TotalIncomeType = {
+  rt: string;
+  rtId: string;
+  year: number;
+  page: number;
+  totalPage: number;
+  totalData: number;
+  data: dataTotalIncomeType[];
+};
+
+export type dataTotalIncomeType = {
+  date: Date;
+  totalIncome: number;
+};

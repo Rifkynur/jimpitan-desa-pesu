@@ -7,7 +7,7 @@ import { SelectOption } from "@/types/select-option-type";
 
 type FilterSelectRtProps = {
   selectedRt: string | number;
-  setSelectedRt: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedRt: React.Dispatch<React.SetStateAction<string | number>>;
   isChart?: boolean;
 };
 

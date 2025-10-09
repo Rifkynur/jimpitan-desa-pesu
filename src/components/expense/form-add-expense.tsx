@@ -53,7 +53,6 @@ const FormAddExpense = ({ onSuccess }: FormAddExpenseProps) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     const payload = {
       ...values,
       amount: Number(values.amount),
@@ -65,10 +64,10 @@ const FormAddExpense = ({ onSuccess }: FormAddExpenseProps) => {
         data: payload,
       });
       if (res) {
-        toast.success("Berhasil Menambah Warga Baru");
+        toast.success("Berhasil Menambah Data Baru");
         onSuccess();
       } else {
-        toast.error("Gagal Menambah Warga Baru");
+        toast.error("Gagal Menambah Data Baru");
       }
     };
     addExpense();

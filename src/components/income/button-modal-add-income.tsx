@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -11,9 +12,14 @@ import {
 import { Input } from "../ui/input";
 import FormAddIncome from "./form-add-income";
 
-const ButtonModalAddIncome = () => {
+type ButtonModalAddIncomeProps = {
+  onSuccess: () => void;
+};
+
+const ButtonModalAddIncome = ({ onSuccess }: ButtonModalAddIncomeProps) => {
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-clr-pumpkin hover:bg-orange-600">Add</Button>
       </DialogTrigger>
@@ -23,7 +29,12 @@ const ButtonModalAddIncome = () => {
             Tambahkan Pemasukan
           </DialogTitle>
           <DialogDescription className="mt-2" asChild>
-            <FormAddIncome />
+            <FormAddIncome
+              onSuccess={() => {
+                setOpen(false);
+                onSuccess();
+              }}
+            />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

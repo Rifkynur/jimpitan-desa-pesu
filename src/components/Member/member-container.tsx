@@ -11,8 +11,10 @@ import FilterSelectStatusMember from "./fliter_select_status_member";
 import { allMembers } from "@/types/members-type";
 
 const MemberContainer = () => {
-  const [selectedRt, setSelectRt] = useState("");
-  const [selectedStatusMember, setSelectedStatusMember] = useState("");
+  const [selectedRt, setSelectRt] = useState<number | string>("");
+  const [selectedStatusMember, setSelectedStatusMember] = useState<
+    string | number
+  >("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);

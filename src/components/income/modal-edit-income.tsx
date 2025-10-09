@@ -13,19 +13,31 @@ import {
 type ModalEditIncomeProps = {
   open: boolean;
   setOpen: (value: boolean) => void;
-  id?: string | number;
+  id: string | number;
+  onSuccess: () => void;
 };
 
-const ModalEditIncome = ({ open = false, setOpen }: ModalEditIncomeProps) => {
+const ModalEditIncome = ({
+  open = false,
+  setOpen,
+  onSuccess,
+  id,
+}: ModalEditIncomeProps) => {
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
-      <DialogContent className="bg-clr-primary">
+      <DialogContent className="bg-clr-primary border-clr-pumpkin">
         <DialogHeader>
           <DialogTitle className="mb-2 font-bold text-lg text-center">
             Ubah Data Pemasukan
           </DialogTitle>
           <DialogDescription className="mt-2" asChild>
-            <FormEditIncome />
+            <FormEditIncome
+              id={id}
+              onSuccess={() => {
+                onSuccess();
+                setOpen(false);
+              }}
+            />
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
