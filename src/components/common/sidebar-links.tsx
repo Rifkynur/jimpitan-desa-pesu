@@ -13,7 +13,6 @@ import {
   LogIn,
   Wallet,
   DollarSign,
-  ClipboardCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,7 +22,7 @@ import { useLogout } from "@/hooks/use-logout";
 
 export function SidebarLinks() {
   const pathname = usePathname();
-  const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn, role } = useAuthStore();
 
   const logout = useLogout();
 
@@ -44,13 +43,25 @@ export function SidebarLinks() {
     { href: "/user", label: "Petugas", icon: UserRound },
   ];
 
+  const AuthLink: LinkItem[] =
+    role == "admin"
+      ? links
+      : [
+          { href: "/", label: "Home", icon: Home },
+          { href: "/income", label: "Pemasukan", icon: DollarSign },
+          { href: "/expense", label: "Pengeluaran", icon: Wallet },
+          { href: "/schedule", label: "Jadwal", icon: CalendarDays },
+          { href: "/member", label: "Warga", icon: Users },
+          // { href: "/report", label: "Report", icon: ClipboardCheck },
+        ];
+
   const authLink: LinkItem = isLoggedIn
     ? { label: "Logout", icon: LogIn, onClick: logout }
     : { href: "/login", label: "Login", icon: LogIn };
 
   return (
     <SidebarMenu className="gap-3">
-      {links.concat(authLink).map((link) => (
+      {AuthLink.concat(authLink).map((link) => (
         <SidebarMenuItem key={link.label}>
           <SidebarMenuButton asChild>
             {link.onClick ? (

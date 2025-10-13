@@ -6,11 +6,13 @@ import TableExpenseContainer from "./table-expense-container";
 import ButtonModalAddExpense from "./button-modal-add-expense";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { expense } from "@/types/expense-type";
+import { useAuthStore } from "@/store/auth-store";
 
 const ExpenseContainer = () => {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [year, setYear] = useState<string | number>("all");
+  const { isLoggedIn } = useAuthStore();
   const [allExpense, setAllExpense] = useState<expense>({
     status: "",
     data: [],
@@ -36,7 +38,7 @@ const ExpenseContainer = () => {
     <div className="flex flex-col gap-4 md:gap-6">
       <div className="flex gap-2">
         <FilterYear setYear={setYear} year={year} />
-        <ButtonModalAddExpense onSuccess={getAllExpense} />
+        {isLoggedIn && <ButtonModalAddExpense onSuccess={getAllExpense} />}
       </div>
       <TableExpenseContainer
         expense={allExpense}

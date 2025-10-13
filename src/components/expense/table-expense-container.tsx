@@ -8,6 +8,7 @@ import { expense } from "@/types/expense-type";
 import { formatDate } from "@/app/utils/date-formatted";
 import SpinnerLoader from "../common/spiner-loading";
 import { PaginationComponent } from "../common/pagination-component";
+import { useAuthStore } from "@/store/auth-store";
 
 type TableExpenseContainerProps = {
   onSuccess: () => void;
@@ -28,6 +29,7 @@ const TableExpenseContainer = ({
   const [id, setId] = useState<string>("");
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const { isLoggedIn } = useAuthStore();
 
   const column = [
     {
@@ -60,6 +62,7 @@ const TableExpenseContainer = ({
     setId(id);
     setOpenEditModal(true);
   };
+
   return (
     <>
       <ModalDeleteData
@@ -83,7 +86,7 @@ const TableExpenseContainer = ({
           <DataTable
             columns={column}
             data={formatedExpense}
-            showActions
+            showActions={isLoggedIn}
             onDelete={handleDeleteExpense}
             onEdit={handleEditExpense}
           />

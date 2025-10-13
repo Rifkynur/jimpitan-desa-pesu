@@ -9,6 +9,7 @@ import { useDebounce } from "use-debounce";
 import SearchComponent from "../common/search-component";
 import FilterSelectStatusMember from "./fliter_select_status_member";
 import { allMembers } from "@/types/members-type";
+import { useAuthStore } from "@/store/auth-store";
 
 const MemberContainer = () => {
   const [selectedRt, setSelectRt] = useState<number | string>("");
@@ -18,6 +19,7 @@ const MemberContainer = () => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
+  const { isLoggedIn } = useAuthStore();
   const [allMember, setAllMember] = useState<allMembers>({
     data: [],
     status: "success",
@@ -55,7 +57,7 @@ const MemberContainer = () => {
           setSelectedStatusMember={setSelectedStatusMember}
         />
         <SearchComponent search={search} setSearch={setSearch} />
-        <ButtonOpenModalAddMember onSuccess={getAllMember} />
+        {isLoggedIn && <ButtonOpenModalAddMember onSuccess={getAllMember} />}
       </div>
       <MemberTable
         onSuccess={getAllMember}

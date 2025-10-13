@@ -17,7 +17,7 @@ export const useFetchApi = <T = unknown>() => {
         method: config.method ?? "get",
         url: `${process.env.NEXT_PUBLIC_BASE_URL}/${config.url}`,
         data: config.data,
-        headers: config.headers,
+        headers: { "Content-Type": "application/json", ...config.headers },
         params: config.params,
         withCredentials: true,
       });

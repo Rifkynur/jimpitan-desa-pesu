@@ -7,7 +7,7 @@ import TabIncomeTable from "./tab-income-table";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { GetIncomeResponse, TotalIncomeType } from "@/types/income-type";
 import SpinnerLoader from "../common/spiner-loading";
-
+import { useAuthStore } from "@/store/auth-store";
 const IncomeContainer = () => {
   const [detailIncome, setDetailIncome] = useState<GetIncomeResponse | null>(
     null
@@ -25,6 +25,7 @@ const IncomeContainer = () => {
   const [totalIncomeTotalPage, setTotalIncomeTotalPage] = useState(1);
 
   const { sendRequest, loading } = useFetchApi();
+  const { isLoggedIn } = useAuthStore();
 
   const getDetailIncome = async () => {
     const res = await sendRequest({
@@ -66,12 +67,14 @@ const IncomeContainer = () => {
           isChart
         />
         <FilterYear setYear={setSelectedYear} year={selectedYear} />
-        <ButtonModalAddIncome
-          onSuccess={() => {
-            getDetailIncome();
-            getTotalIncome();
-          }}
-        />
+        {isLoggedIn && (
+          <ButtonModalAddIncome
+            onSuccess={() => {
+              getDetailIncome();
+              getTotalIncome();
+            }}
+          />
+        )}
       </div>
       {loading ? (
         <SpinnerLoader />

@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useAuthStore } from "@/store/auth-store";
 
 type AmountData = {
   id: string;
@@ -35,6 +36,7 @@ type TableIncomeProps = {
 };
 
 const TableIncome = ({ data, onEdit, onDelete, headers }: TableIncomeProps) => {
+  const { isLoggedIn } = useAuthStore();
   // 🔹 Ambil semua tanggal unik dari data (kalau headers belum dikirim)
   const dynamicHeaders =
     headers ??
@@ -83,7 +85,7 @@ const TableIncome = ({ data, onEdit, onDelete, headers }: TableIncomeProps) => {
                         {value ? value.amount : "Rp.0"}{" "}
                         {/* tampilkan Rp.0 jika tidak ada */}
                       </span>
-                      {value && (
+                      {isLoggedIn && value && (
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <button className="p-1 px-2 rounded hover:bg-muted">
