@@ -60,7 +60,7 @@ const FormAddIncome = ({ onSuccess }: FormAddIncomeProps) => {
     };
     const addIncome = async () => {
       const res = await sendRequest({
-        url: "/income",
+        url: "income",
         method: "post",
         data: payload,
       });
