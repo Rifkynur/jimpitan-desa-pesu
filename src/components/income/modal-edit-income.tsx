@@ -14,13 +14,11 @@ type ModalEditIncomeProps = {
   open: boolean;
   setOpen: (value: boolean) => void;
   id: string | number;
-  onSuccess: () => void;
 };
 
 const ModalEditIncome = ({
   open = false,
   setOpen,
-  onSuccess,
   id,
 }: ModalEditIncomeProps) => {
   return (
@@ -34,7 +32,6 @@ const ModalEditIncome = ({
             <FormEditIncome
               id={id}
               onSuccess={() => {
-                onSuccess();
                 setOpen(false);
               }}
             />

@@ -14,7 +14,6 @@ type IncomeTableProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   dataDetailIncome: GetIncomeResponse;
   loading: boolean;
-  onSuccess: () => void;
 };
 
 const IncomeTable = ({
@@ -23,7 +22,6 @@ const IncomeTable = ({
   setPage,
   dataDetailIncome,
   loading,
-  onSuccess,
 }: IncomeTableProps) => {
   const [id, setId] = useState<string | number>("");
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -58,15 +56,19 @@ const IncomeTable = ({
         id={id}
         setOpen={setOpenDeleteModal}
         open={openDeleteModal}
-        loading={loading}
-        onSuccess={onSuccess}
         url="income"
+        queryKey={[
+          "total-income",
+          "income",
+          "cashflow",
+          "pie-chart",
+          "bar-chart",
+        ]}
       />
       <ModalEditIncome
         open={openEditModal}
         id={id}
         setOpen={setOpenEditModal}
-        onSuccess={onSuccess}
       />
       <div className="flex flex-col">
         <TableIncome

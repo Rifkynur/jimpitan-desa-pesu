@@ -15,14 +15,8 @@ type modalEditMemberProps = {
   open: boolean;
   setOpen: (value: boolean) => void;
   id: string;
-  onSuccess: () => void;
 };
-const ModalEditUser = ({
-  open = false,
-  setOpen,
-  onSuccess,
-  id,
-}: modalEditMemberProps) => {
+const ModalEditUser = ({ open = false, setOpen, id }: modalEditMemberProps) => {
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
       <DialogContent className="bg-clr-primary border-clr-pumpkin">
@@ -33,7 +27,6 @@ const ModalEditUser = ({
           <DialogDescription className="mt-2" asChild>
             <FormEditUser
               onSuccess={() => {
-                onSuccess();
                 setOpen(false);
               }}
               id={id}

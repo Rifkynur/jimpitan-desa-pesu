@@ -18,7 +18,6 @@ type Member = {
 };
 
 type MembertableProps = {
-  onSuccess: () => void;
   members: allMembers;
   loading: boolean;
   setPage: React.Dispatch<React.SetStateAction<number>>;
@@ -27,7 +26,6 @@ type MembertableProps = {
 };
 
 const MemberTable = ({
-  onSuccess,
   members,
   loading,
   setPage,
@@ -83,15 +81,13 @@ const MemberTable = ({
         id={id}
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}
-        onSuccess={onSuccess}
-        url="members"
-        loading={loading}
+        url={"members"}
+        queryKey={["members", "total-income", "income"]}
       />
       <ModalEditMember
         open={openEditModal}
         setOpen={setOpenEditModal}
         id={id}
-        onSuccess={onSuccess}
       />
       {loading ? (
         <SpinnerLoader />

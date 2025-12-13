@@ -12,8 +12,8 @@ type ScheduleCardPros = {
 const ScheduleCard = ({ week, members }: ScheduleCardPros) => {
   return (
     <Card className="bg-card-background text-white border-clr-pumpkin px-2">
-      <CardHeader className="bg-clr-pumpkin p-1 text-center font-bold uppercase rounded-lg ">
-        <CardTitle>Minggu {week}</CardTitle>
+      <CardHeader className="bg-clr-pumpkin p-1 text-center font-bold uppercase rounded-lg flex items-center justify-center">
+        <CardTitle className="font-bold py-1">Minggu {week}</CardTitle>
       </CardHeader>
       <CardContent>
         <ul className="text-center flex flex-col gap-2">

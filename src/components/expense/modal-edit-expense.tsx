@@ -6,7 +6,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../ui/dialog";
 import FormEditExpense from "./form-edit-expense";
 
@@ -14,14 +13,12 @@ type ModalEditIncomeProps = {
   open: boolean;
   setOpen: (value: boolean) => void;
   id: string;
-  onSuccess: () => void;
 };
 
 const ModalEditExpense = ({
   open = false,
   setOpen,
   id,
-  onSuccess,
 }: ModalEditIncomeProps) => {
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
@@ -35,7 +32,6 @@ const ModalEditExpense = ({
               id={id}
               onSuccess={() => {
                 setOpen(false);
-                onSuccess();
               }}
             />
           </DialogDescription>

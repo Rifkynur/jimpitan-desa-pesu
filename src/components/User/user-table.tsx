@@ -10,10 +10,9 @@ import { useAuthStore } from "@/store/auth-store";
 type UserTableProps = {
   users: user[];
   loading: boolean;
-  onSuccess: () => void;
 };
 
-const UserTable = ({ users, loading, onSuccess }: UserTableProps) => {
+const UserTable = ({ users, loading }: UserTableProps) => {
   const [id, setId] = useState<string>("");
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -50,15 +49,9 @@ const UserTable = ({ users, loading, onSuccess }: UserTableProps) => {
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}
         url="users"
-        onSuccess={onSuccess}
-        loading={loading}
+        queryKey={"users"}
       />
-      <ModalEditUser
-        open={openEditModal}
-        setOpen={setOpenEditModal}
-        onSuccess={onSuccess}
-        id={id}
-      />
+      <ModalEditUser open={openEditModal} setOpen={setOpenEditModal} id={id} />
       {loading ? (
         <SpinnerLoader />
       ) : (

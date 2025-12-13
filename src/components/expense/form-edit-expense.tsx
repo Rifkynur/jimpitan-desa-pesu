@@ -25,6 +25,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { toast } from "sonner";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 
 type FormAddExpenseProps = {
   id: string;
@@ -53,42 +54,57 @@ const FormEditExpense = ({ id, onSuccess }: FormAddExpenseProps) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    const payload = {
-      ...values,
-      amount: Number(values.amount),
-    };
-    const editExpense = async () => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      const payload = {
+        ...values,
+        amount: Number(values.amount),
+        date: format(values.date, "yyyy-MM-dd"),
+      };
       const res = await sendRequest({
         url: `expense/${id}`,
         method: "patch",
         data: payload,
       });
-      if (res) {
-        toast.success("Berhasil Mengubah Data");
-        onSuccess();
-      } else {
-        toast.error("Gagal Mengubah Data");
+      if (!res) {
+        throw new Error("Gagal mengubah data");
       }
-    };
-    editExpense();
-  }
-  useEffect(() => {
-    const getDetailUsers = async () => {
-      const expenseDetail = await sendRequest({ url: `expense/${id}` });
-      console.log(expenseDetail);
+    },
+    onSuccess: () => {
+      toast.success("Berhasil Mengubah Data");
+      queryClient.invalidateQueries({ queryKey: ["expense"] });
+      queryClient.invalidateQueries({ queryKey: ["cashflow"] });
+      queryClient.invalidateQueries({ queryKey: ["pie-chart"] });
+      queryClient.invalidateQueries({ queryKey: ["bar-chart"] });
+      onSuccess();
+    },
+    onError: () => {
+      toast.error("Gagal Mengubah Data");
+    },
+  });
 
-      if (expenseDetail) {
-        form.reset({
-          amount: expenseDetail.data.amount.toString(),
-          desc: expenseDetail.data.desc,
-          date: new Date(expenseDetail.data.date),
-        });
-      }
-    };
-    getDetailUsers();
-  }, []);
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    mutate(values);
+  }
+  const { data: expenseDetail } = useQuery({
+    queryKey: ["expense", id],
+    queryFn: async () => {
+      const res = await sendRequest({ url: `expense/${id}` });
+      return res.data;
+    },
+  });
+
+  useEffect(() => {
+    if (expenseDetail) {
+      form.reset({
+        amount: expenseDetail.amount.toString(),
+        desc: expenseDetail.desc,
+        date: new Date(expenseDetail.date),
+      });
+    }
+  }, [expenseDetail]);
+
   return (
     <div>
       <Form {...form}>
@@ -106,6 +122,7 @@ const FormEditExpense = ({ id, onSuccess }: FormAddExpenseProps) => {
                       placeholder="Masukkan Jumlah Pengeluaran"
                       {...field}
                       onChange={(e) => field.onChange(e.target.value)}
+                      autoComplete="off"
                     />
                   </FormControl>
                 </div>

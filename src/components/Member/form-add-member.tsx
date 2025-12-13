@@ -16,6 +16,7 @@ import { Input } from "../ui/input";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { toast } from "sonner";
 import SelectRt from "../common/select-rt-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type FormAddMemberProps = {
   onSuccess: () => void;
@@ -38,21 +39,33 @@ const FormAddMember = ({ onSuccess }: FormAddMemberProps) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const addMember = async () => {
-      const handleAddMember = await sendRequest({
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      const res = await sendRequest({
         url: "members",
         method: "post",
         data: values,
       });
-      if (handleAddMember) {
-        toast.success("Berhasil Menambah Warga Baru");
-        onSuccess();
-      } else {
-        toast.error("Gagal Menambah Warga Baru");
+      if (!res) {
+        throw new Error("Gagal menambah data");
       }
-    };
-    addMember();
+    },
+    onSuccess: () => {
+      form.reset();
+      onSuccess();
+      toast.success("Berhasil Menambah Warga Baru");
+      queryClient.invalidateQueries({ queryKey: ["members"] });
+      queryClient.invalidateQueries({ queryKey: ["income"] });
+      queryClient.invalidateQueries({ queryKey: ["total-income"] });
+    },
+    onError: () => {
+      toast.error("Gagal Menambah Warga Baru");
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    mutate(values);
   }
   return (
     <div>
@@ -66,7 +79,11 @@ const FormAddMember = ({ onSuccess }: FormAddMemberProps) => {
               <FormItem>
                 <FormLabel>Nama</FormLabel>
                 <FormControl>
-                  <Input placeholder="Masukkan nama" {...field} />
+                  <Input
+                    placeholder="Masukkan nama"
+                    {...field}
+                    autoComplete="off"
+                  />
                 </FormControl>
                 <FormMessage className="text-left" />
               </FormItem>
@@ -92,7 +109,7 @@ const FormAddMember = ({ onSuccess }: FormAddMemberProps) => {
           <Button
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
-            disabled={loading}
+            disabled={isPending}
           >
             Tambah
           </Button>

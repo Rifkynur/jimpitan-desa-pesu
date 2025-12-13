@@ -1,49 +1,41 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import TableExpense from "./table-expense";
+import { useState } from "react";
 import FilterYear from "../common/filter-year";
 import TableExpenseContainer from "./table-expense-container";
 import ButtonModalAddExpense from "./button-modal-add-expense";
 import { useFetchApi } from "@/hooks/use-fetch-api";
-import { expense } from "@/types/expense-type";
 import { useAuthStore } from "@/store/auth-store";
+import { useQuery } from "@tanstack/react-query";
 
 const ExpenseContainer = () => {
   const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(1);
   const [year, setYear] = useState<string | number>("all");
-  const { isLoggedIn } = useAuthStore();
-  const [allExpense, setAllExpense] = useState<expense>({
-    status: "",
-    data: [],
-    page: 1,
-    totalPage: 11,
-    totalData: 10,
-  });
-  const { sendRequest, loading } = useFetchApi();
+  const { isLoggedIn, role } = useAuthStore();
+  const { sendRequest } = useFetchApi();
 
-  const getAllExpense = async () => {
-    const res = await sendRequest({
-      url: "expense",
-      params: { page: page && page, year: year && year },
-    });
-    setPage(res.page);
-    setTotalPage(res.totalPage);
-    setAllExpense(res);
-  };
-  useEffect(() => {
-    getAllExpense();
-  }, [page, year]);
+  const { data, isLoading } = useQuery({
+    queryKey: ["expense", page, year],
+    queryFn: async () => {
+      const res = await sendRequest({
+        url: "expense",
+        params: { page: page && page, year: year && year },
+      });
+      return res;
+    },
+    staleTime: 1000 * 60 * 30,
+  });
+
+  const totalPage = data?.totalPage ?? 1;
+
   return (
     <div className="flex flex-col gap-4 md:gap-6">
       <div className="flex gap-2">
         <FilterYear setYear={setYear} year={year} />
-        {isLoggedIn && <ButtonModalAddExpense onSuccess={getAllExpense} />}
+        {isLoggedIn && role == "admin" && <ButtonModalAddExpense />}
       </div>
       <TableExpenseContainer
-        expense={allExpense}
-        onSuccess={getAllExpense}
-        loading={loading}
+        expense={data}
+        loading={isLoading}
         setPage={setPage}
         page={page}
         totalPage={totalPage}

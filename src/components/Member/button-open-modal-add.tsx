@@ -9,15 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "../ui/input";
 import FormAddUser from "./form-add-member";
 
-type ButtonOpenModalAddMemberProps = {
-  onSuccess: () => void;
-};
-const ButtonOpenModalAddMember = ({
-  onSuccess,
-}: ButtonOpenModalAddMemberProps) => {
+const ButtonOpenModalAddMember = () => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -33,7 +27,6 @@ const ButtonOpenModalAddMember = ({
           <DialogDescription className="mt-2" asChild>
             <FormAddUser
               onSuccess={() => {
-                onSuccess();
                 setOpen(false);
               }}
             />

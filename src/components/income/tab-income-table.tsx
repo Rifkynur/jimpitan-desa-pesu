@@ -13,7 +13,6 @@ type TableIncomeProps = {
   setTotalIncomePage: React.Dispatch<React.SetStateAction<number>>;
   dataDetailIcome: GetIncomeResponse;
   loading: boolean;
-  onSuccess: () => void;
   totalDataIncome: TotalIncomeType | null;
 };
 
@@ -25,7 +24,6 @@ const TabIncomeTable = ({
   setPage,
   dataDetailIcome,
   loading,
-  onSuccess,
   setTotalIncomePage,
   totalDataIncome,
 }: TableIncomeProps) => {
@@ -46,7 +44,6 @@ const TabIncomeTable = ({
           setPage={setPage}
           dataDetailIncome={dataDetailIcome}
           loading={loading}
-          onSuccess={onSuccess}
         />
       </TabsContent>
       <TabsContent value="password">

@@ -25,6 +25,8 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 type FormAddExpenseProps = {
   onSuccess: () => void;
@@ -52,25 +54,39 @@ const FormAddExpense = ({ onSuccess }: FormAddExpenseProps) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const payload = {
-      ...values,
-      amount: Number(values.amount),
-    };
-    const addExpense = async () => {
+  const queryClient = useQueryClient();
+  const addExpenseMutation = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      const payload = {
+        ...values,
+        amount: Number(values.amount),
+        date: format(values.date, "yyyy-MM-dd"),
+      };
       const res = await sendRequest({
         url: "expense",
         method: "post",
         data: payload,
       });
-      if (res) {
-        toast.success("Berhasil Menambah Data Baru");
-        onSuccess();
-      } else {
-        toast.error("Gagal Menambah Data Baru");
+      if (!res) {
+        throw new Error("Gagal menambah data");
       }
-    };
-    addExpense();
+    },
+    onSuccess: () => {
+      toast.success("Berhasil Menambah Data Baru");
+      queryClient.invalidateQueries({ queryKey: ["expense"] });
+      queryClient.invalidateQueries({ queryKey: ["cashflow"] });
+      queryClient.invalidateQueries({ queryKey: ["pie-chart"] });
+      queryClient.invalidateQueries({ queryKey: ["bar-chart"] });
+      form.reset();
+      onSuccess();
+    },
+    onError: () => {
+      toast.error("Gagal Menambah Data Baru");
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    addExpenseMutation.mutate(values);
   }
   return (
     <div>
@@ -89,6 +105,7 @@ const FormAddExpense = ({ onSuccess }: FormAddExpenseProps) => {
                       placeholder="Masukkan Jumlah Pengeluaran"
                       {...field}
                       onChange={(e) => field.onChange(e.target.value)}
+                      autoComplete="off"
                     />
                   </FormControl>
                 </div>

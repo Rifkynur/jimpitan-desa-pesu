@@ -15,13 +15,11 @@ type modalEditMemberProps = {
   open: boolean;
   setOpen: (value: boolean) => void;
   id: string;
-  onSuccess: () => void;
 };
 const ModalEditMember = ({
   open = false,
   setOpen,
   id,
-  onSuccess,
 }: modalEditMemberProps) => {
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
@@ -33,7 +31,6 @@ const ModalEditMember = ({
           <DialogDescription className="mt-2" asChild>
             <FormEditMember
               onSuccess={() => {
-                onSuccess();
                 setOpen(false);
               }}
               id={id}

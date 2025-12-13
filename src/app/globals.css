@@ -206,3 +206,11 @@
     transform: rotate(1turn);
   }
 }
+[data-slot="command-list"] {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y !important;
+}
+[data-slot="command-item"] {
+  touch-action: none;
+}

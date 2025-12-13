@@ -74,7 +74,7 @@ const TableIncome = ({ data, onEdit, onDelete, headers }: TableIncomeProps) => {
                 {row.name}
               </TableCell>
 
-              {dynamicHeaders.map((date) => {
+              {dynamicHeaders?.map((date) => {
                 // cari amount di tanggal ini
                 const value = row.values.find((v: any) => v.date === date);
 

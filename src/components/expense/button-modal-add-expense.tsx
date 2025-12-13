@@ -9,13 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "../ui/input";
 import FormAddExpense from "./form-add-expense";
 
-type ButtonModalAddExpenseProps = {
-  onSuccess: () => void;
-};
-const ButtonModalAddExpense = ({ onSuccess }: ButtonModalAddExpenseProps) => {
+const ButtonModalAddExpense = () => {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -30,7 +26,6 @@ const ButtonModalAddExpense = ({ onSuccess }: ButtonModalAddExpenseProps) => {
           <DialogDescription className="mt-2" asChild>
             <FormAddExpense
               onSuccess={() => {
-                onSuccess();
                 setOpen(false);
               }}
             />

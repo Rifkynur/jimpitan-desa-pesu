@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Form,
   FormControl,
@@ -17,6 +17,7 @@ import SelectRt from "@/components/common/select-rt-form";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type FormAddUserProps = {
   onSuccess: () => void;
@@ -32,7 +33,7 @@ const formSchema = z.object({
 
 const FormAddUser = ({ onSuccess }: FormAddUserProps) => {
   const [showPassword, setShowPassword] = useState(false);
-  const { loading, sendRequest } = useFetchApi();
+  const { sendRequest } = useFetchApi();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,22 +43,32 @@ const FormAddUser = ({ onSuccess }: FormAddUserProps) => {
       password: "",
     },
   });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const addUser = async () => {
-      const handleAddUser = await sendRequest({
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      const res = await sendRequest({
         url: "users",
         method: "post",
         data: values,
       });
-      if (handleAddUser) {
-        toast.success("Berhasil Menambah Petugas Baru");
-        onSuccess();
-      } else {
-        toast.error("Gagal Menambah Petugas Baru");
+
+      if (!res) {
+        throw new Error("Gagal menambah data");
       }
-    };
-    addUser();
+    },
+    onSuccess: () => {
+      toast.success("Berhasil Menambah Petugas Baru");
+      form.reset();
+      onSuccess();
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: () => {
+      toast.error("Gagal Menambah Petugas Baru");
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    mutate(values);
   }
 
   return (
@@ -72,7 +83,11 @@ const FormAddUser = ({ onSuccess }: FormAddUserProps) => {
               <FormItem>
                 <FormLabel>Nama</FormLabel>
                 <FormControl>
-                  <Input placeholder="Masukkan nama" {...field} />
+                  <Input
+                    placeholder="Masukkan nama"
+                    {...field}
+                    autoComplete="off"
+                  />
                 </FormControl>
                 <FormMessage className="text-left" />
               </FormItem>
@@ -127,7 +142,7 @@ const FormAddUser = ({ onSuccess }: FormAddUserProps) => {
           />
 
           <Button
-            disabled={loading}
+            disabled={isPending}
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
           >

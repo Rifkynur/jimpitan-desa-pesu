@@ -11,7 +11,7 @@ import { PaginationComponent } from "../common/pagination-component";
 import { useAuthStore } from "@/store/auth-store";
 
 type TableExpenseContainerProps = {
-  onSuccess: () => void;
+  onSuccess?: () => void;
   expense: expense;
   loading: boolean;
   page: number;
@@ -20,7 +20,6 @@ type TableExpenseContainerProps = {
 };
 const TableExpenseContainer = ({
   expense,
-  onSuccess,
   loading,
   setPage,
   page,
@@ -46,7 +45,7 @@ const TableExpenseContainer = ({
     },
   ];
 
-  const formatedExpense = expense.data.map((data) => ({
+  const formatedExpense = expense?.data?.map((data) => ({
     id: data.id,
     date: formatDate(data.date),
     amount: data.amount,
@@ -69,15 +68,13 @@ const TableExpenseContainer = ({
         id={id}
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}
-        onSuccess={onSuccess}
         url="expense"
-        loading={loading}
+        queryKey={["expense", "cashflow", "pie-chart", "bar-chart"]}
       />
       <ModalEditExpense
         open={openEditModal}
         setOpen={setOpenEditModal}
         id={id}
-        onSuccess={onSuccess}
       />
       {loading ? (
         <SpinnerLoader />

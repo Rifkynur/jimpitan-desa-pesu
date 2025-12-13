@@ -12,10 +12,7 @@ import {
 import { Input } from "../ui/input";
 import FormAddUser from "./form-add-user";
 
-type ButtonOpenModalAddUserProps = {
-  onSuccess: () => void;
-};
-const ButtonOpenModalAddUser = ({ onSuccess }: ButtonOpenModalAddUserProps) => {
+const ButtonOpenModalAddUser = () => {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -30,7 +27,6 @@ const ButtonOpenModalAddUser = ({ onSuccess }: ButtonOpenModalAddUserProps) => {
           <DialogDescription className="mt-2" asChild>
             <FormAddUser
               onSuccess={() => {
-                onSuccess();
                 setOpen(false);
               }}
             />

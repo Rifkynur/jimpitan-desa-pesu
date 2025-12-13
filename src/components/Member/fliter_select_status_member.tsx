@@ -1,52 +1,35 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { SelectComponent } from "../common/select-component";
-import { useFetchApi } from "@/hooks/use-fetch-api";
-import { SelectOption } from "@/types/select-option-type";
-import { status_member } from "@/types/members-type";
+'use client';
+import { SelectComponent } from '../common/select-component';
+import { useFetchApi } from '@/hooks/use-fetch-api';
+import { SelectOption } from '@/types/select-option-type';
+import { status_member } from '@/types/members-type';
+import { useQuery } from '@tanstack/react-query';
 
 type FilterSelectStatusMemberProps = {
   selectedStatusMember: string | number;
-  setSelectedStatusMember: React.Dispatch<
-    React.SetStateAction<string | number>
-  >;
+  setSelectedStatusMember: React.Dispatch<React.SetStateAction<string | number>>;
 };
 
-const FilterSelectStatusMember = ({
-  selectedStatusMember,
-  setSelectedStatusMember,
-}: FilterSelectStatusMemberProps) => {
+const FilterSelectStatusMember = ({ selectedStatusMember, setSelectedStatusMember }: FilterSelectStatusMemberProps) => {
   const { sendRequest } = useFetchApi();
-  const [optionStatusMember, setOptionStatusMember] = useState<SelectOption[]>(
-    []
-  );
 
-  useEffect(() => {
-    const getAllStatusMember = async () => {
-      const allStatus = await sendRequest({ url: "members/status" });
-      console.log(allStatus);
-
+  const { data: formatedStatus, isLoading } = useQuery({
+    queryKey: ['filter-status-member'],
+    queryFn: async () => {
+      const res = await sendRequest({ url: 'members/status' });
       const formatedOption: SelectOption[] = [
-        { value: "all", label: "Semua" },
+        { value: 'all', label: 'Semua' },
 
-        ...allStatus.data.map((data: status_member) => ({
+        ...res.data.map((data: status_member) => ({
           value: data.id,
           label: data.name,
         })),
       ];
-      setOptionStatusMember(formatedOption);
-    };
-    getAllStatusMember();
-  }, []);
-
-  return (
-    <SelectComponent
-      onChange={setSelectedStatusMember}
-      options={optionStatusMember}
-      value={selectedStatusMember}
-      placeholder="Pilih Status"
-    />
-  );
+      return formatedOption;
+    },
+    staleTime: 1000 * 60 * 30,
+  });
+  return <>{formatedStatus && <SelectComponent loading={isLoading} onChange={setSelectedStatusMember} options={formatedStatus} value={selectedStatusMember} placeholder="Pilih Status" />}</>;
 };
 
 export default FilterSelectStatusMember;

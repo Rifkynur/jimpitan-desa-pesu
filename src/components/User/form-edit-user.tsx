@@ -17,6 +17,7 @@ import SelectRt from "@/components/common/select-rt-form";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 type FormEditUserProps = {
   onSuccess: () => void;
@@ -32,7 +33,7 @@ const formSchema = z.object({
 });
 const FormEditUser = ({ onSuccess, id }: FormEditUserProps) => {
   const [showPassword, setShowPassword] = useState(false);
-  const { loading, sendRequest } = useFetchApi();
+  const { sendRequest } = useFetchApi();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,35 +43,50 @@ const FormEditUser = ({ onSuccess, id }: FormEditUserProps) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const updatedUser = async () => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
       const res = await sendRequest({
         url: `users/${id}`,
         method: "patch",
         data: values,
       });
-      if (res) {
-        toast.success("Berhasil Mengubah Petugas Baru");
-        onSuccess();
-      } else {
-        toast.error("Gagal Mengubah Petugas Baru");
+
+      if (!res) {
+        throw new Error("Gagal mengedit data");
       }
-    };
-    updatedUser();
+    },
+    onSuccess: () => {
+      toast.success("Berhasil Mengubah Petugas Baru");
+      onSuccess();
+      form.reset();
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: () => {
+      toast.error("Gagal Mengubah Petugas Baru");
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    mutate(values);
   }
 
+  const { data: userDetail } = useQuery({
+    queryKey: ["users", id],
+    queryFn: async () => {
+      const res = await sendRequest({ url: `users/${id}` });
+      return res;
+    },
+  });
+
   useEffect(() => {
-    const getDetailUsers = async () => {
-      const userDetail = await sendRequest({ url: `users/${id}` });
-      if (userDetail) {
-        form.reset({
-          username: userDetail.detailUsers.username,
-          rtId: userDetail.detailUsers.rt.id,
-        });
-      }
-    };
-    getDetailUsers();
-  }, []);
+    if (userDetail) {
+      form.reset({
+        username: userDetail?.detailUsers.username,
+        rtId: userDetail?.detailUsers.rt.id,
+      });
+    }
+  }, [userDetail]);
   return (
     <div>
       <Form {...form}>
@@ -83,7 +99,11 @@ const FormEditUser = ({ onSuccess, id }: FormEditUserProps) => {
               <FormItem>
                 <FormLabel>Nama</FormLabel>
                 <FormControl>
-                  <Input placeholder="Masukkan nama" {...field} />
+                  <Input
+                    placeholder="Masukkan nama"
+                    {...field}
+                    autoComplete="off"
+                  />
                 </FormControl>
                 <FormMessage className="text-left" />
               </FormItem>
@@ -140,7 +160,7 @@ const FormEditUser = ({ onSuccess, id }: FormEditUserProps) => {
           <Button
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
-            disabled={loading}
+            disabled={isPending}
           >
             Ubah
           </Button>

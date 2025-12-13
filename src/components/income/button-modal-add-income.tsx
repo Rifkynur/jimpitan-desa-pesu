@@ -12,11 +12,7 @@ import {
 import { Input } from "../ui/input";
 import FormAddIncome from "./form-add-income";
 
-type ButtonModalAddIncomeProps = {
-  onSuccess: () => void;
-};
-
-const ButtonModalAddIncome = ({ onSuccess }: ButtonModalAddIncomeProps) => {
+const ButtonModalAddIncome = () => {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -32,7 +28,6 @@ const ButtonModalAddIncome = ({ onSuccess }: ButtonModalAddIncomeProps) => {
             <FormAddIncome
               onSuccess={() => {
                 setOpen(false);
-                onSuccess();
               }}
             />
           </DialogDescription>

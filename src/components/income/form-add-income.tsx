@@ -26,6 +26,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type FormAddIncomeProps = {
   onSuccess: () => void;
@@ -43,7 +44,7 @@ const formSchema = z.object({
 });
 const FormAddIncome = ({ onSuccess }: FormAddIncomeProps) => {
   const [openCalendar, setOpenCalendar] = useState(false);
-  const { loading, sendRequest } = useFetchApi();
+  const { sendRequest } = useFetchApi();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,26 +54,61 @@ const FormAddIncome = ({ onSuccess }: FormAddIncomeProps) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const payload = {
-      ...values,
-      amount: Number(values.amount),
-    };
-    const addIncome = async () => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      const payload = {
+        ...values,
+        date: format(values.date, "yyyy-MM-dd"),
+        amount: Number(values.amount),
+      };
       const res = await sendRequest({
         url: "income",
         method: "post",
         data: payload,
       });
-      if (res) {
-        toast.success("Berhasil Menambah Data Baru");
-        onSuccess();
-      } else {
-        toast.error("Gagal Menambah Data Baru");
+      if (!res) {
+        throw new Error("Gagal menambah data");
       }
-    };
-    addIncome();
+    },
+    onSuccess: () => {
+      toast.success("Berhasil Menambah Data Baru");
+      queryClient.invalidateQueries({ queryKey: ["total-income"] });
+      queryClient.invalidateQueries({ queryKey: ["income"] });
+      queryClient.invalidateQueries({ queryKey: ["cashflow"] });
+      queryClient.invalidateQueries({ queryKey: ["pie-chart"] });
+      queryClient.invalidateQueries({ queryKey: ["bar-chart"] });
+
+      onSuccess();
+      form.reset();
+    },
+    onError: () => {
+      toast.error("Gagal Menambah Data Baru");
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    mutate(values);
+    // const payload = {
+    //   ...values,
+    //   amount: Number(values.amount),
+    // };
+    // const addIncome = async () => {
+    //   const res = await sendRequest({
+    //     url: "income",
+    //     method: "post",
+    //     data: payload,
+    //   });
+    //   if (res) {
+    //     toast.success("Berhasil Menambah Data Baru");
+    //     onSuccess();
+    //   } else {
+    //     toast.error("Gagal Menambah Data Baru");
+    //   }
+    // };
+    // addIncome();
   }
+
   return (
     <div>
       <Form {...form}>
@@ -102,6 +138,7 @@ const FormAddIncome = ({ onSuccess }: FormAddIncomeProps) => {
                       placeholder="Masukkan Jumlah Pengeluaran"
                       {...field}
                       onChange={(e) => field.onChange(e.target.value)}
+                      autoComplete="off"
                     />
                   </FormControl>
                 </div>
@@ -164,6 +201,7 @@ const FormAddIncome = ({ onSuccess }: FormAddIncomeProps) => {
           <Button
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
+            disabled={isPending}
           >
             Tambah
           </Button>

@@ -58,8 +58,8 @@ export function DataTable<T extends { id: string }>({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.length > 0 ? (
-            data.map((row) => (
+          {data?.length > 0 ? (
+            data?.map((row) => (
               <TableRow key={row.id}>
                 {columns.map((col) => (
                   <TableCell

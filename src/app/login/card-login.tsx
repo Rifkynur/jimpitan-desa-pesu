@@ -19,7 +19,7 @@ import { useFetchApi } from "@/hooks/use-fetch-api";
 import { useAuthStore } from "@/store/auth-store";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { log } from "console";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const formSchema = z.object({
   username: z.string().min(3, {
@@ -43,32 +43,36 @@ const CardLogin = () => {
       password: "",
     },
   });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const handleLogin = async () => {
-      const datas = await sendRequest({
+  const queryClient = useQueryClient();
+  const loginMutation = useMutation({
+    mutationFn: async (values: { username: string; password: string }) => {
+      const res = await sendRequest({
         method: "post",
         url: "auth/login",
         data: values,
       });
-      if (datas) {
-        toast.success("Berhasil login");
-        router.push("/");
-        await login(datas?.userData?.role?.name);
-      } else {
-        console.log(error);
-
-        toast.error(error || "username/password yang anda masukan salah");
+      if (!res) {
+        throw new Error("No response from server");
       }
+      return res;
+    },
+    onSuccess: async (datas) => {
+      toast.success("Berhasil login");
+      router.push("/");
+      queryClient.invalidateQueries({ queryKey: ["check-auth"] });
+      await login(datas?.userData?.role?.name);
+    },
+    onError: (err: any) => {
+      toast.error("Username/password salah");
+    },
+  });
 
-      form.reset();
-    };
-
-    handleLogin();
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    loginMutation.mutate(values);
   }
 
   return (
-    <Card className="bg-card-background text-clr-silver-v1 border-none w-full md:w-96">
+    <Card className="bg-card-background flex text-clr-silver-v1 border-none w-[80%] md:w-96 lg:w-[500px]">
       <CardHeader>
         <CardTitle className="text-center font-bold">LOGIN</CardTitle>
       </CardHeader>

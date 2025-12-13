@@ -28,9 +28,10 @@ const TableTotalIncome = ({
   ];
   const dataOptions = dataTotalIncome?.map((data, i) => ({
     id: i.toString(),
-    date: formatDate(data.date),
+    date: formatDate(data?.date),
     amount: `Rp.${data.totalIncome.toLocaleString("id-ID")}`,
-  }));
+  }
+));
 
   return (
     <>

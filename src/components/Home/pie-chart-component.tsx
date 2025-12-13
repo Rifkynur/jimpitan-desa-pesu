@@ -16,7 +16,7 @@ type PieChartComponnetProps = {
 };
 
 export function PieChartComponent({ data }: PieChartComponnetProps) {
-  const chartData = data.map((dat, i) => ({
+  const chartData = data?.map((dat, i) => ({
     rt: `Rt ${dat.rt}`,
     income: dat.total,
     fill: `var(--chart-${i + 1})`,
@@ -40,7 +40,7 @@ export function PieChartComponent({ data }: PieChartComponnetProps) {
   } satisfies ChartConfig;
   return (
     <Card className="flex flex-col bg-card-background border-clr-pumpkin  lg:col-span-4">
-      {chartData.length > 0 ? (
+      {chartData?.length > 0 ? (
         <>
           <CardContent className="flex-1 pb-0">
             <ChartContainer

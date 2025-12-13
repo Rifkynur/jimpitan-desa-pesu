@@ -17,6 +17,7 @@ import SelectStatus from "./select-status";
 import SelectRt from "../common/select-rt-form";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { toast } from "sonner";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 type FormEditMemberProps = {
   id: string;
@@ -31,7 +32,7 @@ const formSchema = z.object({
   status_memberId: z.string().min(1, { message: "Status warga wajib diisi" }),
 });
 const FormEditMember = ({ id, onSuccess }: FormEditMemberProps) => {
-  const { sendRequest, loading } = useFetchApi();
+  const { sendRequest } = useFetchApi();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,38 +43,51 @@ const FormEditMember = ({ id, onSuccess }: FormEditMemberProps) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    const updateMember = async () => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
       const res = await sendRequest({
         url: `members/${id}`,
         method: "patch",
         data: values,
       });
-      if (res) {
-        toast.success("Berhasil Mengubah Data Warga");
-        onSuccess();
-      } else {
-        toast.error("Gagal Mengubah data Warga");
+      if (!res) {
+        throw new Error("Gagal mengubah data");
       }
-    };
-    updateMember();
-  }
-  useEffect(() => {
-    const getDetailUsers = async () => {
-      const memberDetail = await sendRequest({ url: `members/${id}` });
-      console.log(memberDetail);
+    },
+    onSuccess: () => {
+      onSuccess();
+      form.reset();
+      toast.success("Berhasil Mengubah Data Warga");
+      queryClient.invalidateQueries({ queryKey: ["members"] });
+      queryClient.invalidateQueries({ queryKey: ["income"] });
+      queryClient.invalidateQueries({ queryKey: ["total-income"] });
+    },
+    onError: () => {
+      toast.error("Gagal Mengubah data Warga");
+    },
+  });
 
-      if (memberDetail) {
-        form.reset({
-          name: memberDetail.data.name,
-          rtId: memberDetail.data.rt.id,
-          status_memberId: memberDetail.data.Status_member.id,
-        });
-      }
-    };
-    getDetailUsers();
-  }, []);
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    mutate(values);
+  }
+
+  const { data: detailUser } = useQuery({
+    queryKey: ["members", id],
+    queryFn: async () => {
+      const res = await sendRequest({ url: `members/${id}` });
+      return res;
+    },
+  });
+  useEffect(() => {
+    if (detailUser) {
+      form.reset({
+        name: detailUser?.data?.name,
+        rtId: detailUser?.data?.rt.id,
+        status_memberId: detailUser?.data.Status_member.id,
+      });
+    }
+  }, [detailUser]);
   return (
     <div>
       <Form {...form}>
@@ -130,7 +144,7 @@ const FormEditMember = ({ id, onSuccess }: FormEditMemberProps) => {
           <Button
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
-            disabled={loading}
+            disabled={isPending}
           >
             Ubah
           </Button>

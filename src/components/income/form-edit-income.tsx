@@ -13,8 +13,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import SelectRt from "./select-rt";
-import SelectName from "./select-name";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   Popover,
@@ -44,7 +43,7 @@ const formSchema = z.object({
 });
 const FormEditIncome = ({ id, onSuccess }: FormEditIncomeProps) => {
   const [openCalendar, setOpenCalendar] = useState(false);
-  const { loading, sendRequest } = useFetchApi();
+  const { sendRequest } = useFetchApi();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,40 +52,57 @@ const FormEditIncome = ({ id, onSuccess }: FormEditIncomeProps) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const payload = {
-      ...values,
-      amount: Number(values.amount),
-    };
-    const addIncome = async () => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      const payload = {
+        ...values,
+        date: format(values.date, "yyyy-MM-dd"),
+        amount: Number(values.amount),
+      };
       const res = await sendRequest({
         url: `income/${id}`,
         method: "patch",
         data: payload,
       });
-      if (res) {
-        toast.success("Berhasil Mengubah Data");
-        onSuccess();
-      } else {
-        toast.error("Gagal Mengubah Data");
+      if (!res) {
+        throw new Error("Gagal menambah data");
       }
-    };
-    addIncome();
-  }
-  useEffect(() => {
-    const getDetailUsers = async () => {
-      const incomeDetail = await sendRequest({ url: `income/${id}` });
-      console.log(incomeDetail);
+    },
+    onSuccess: () => {
+      toast.success("Berhasil Mengubah Data");
+      form.reset();
+      queryClient.invalidateQueries({ queryKey: ["income"] });
+      queryClient.invalidateQueries({ queryKey: ["total-income"] });
+      queryClient.invalidateQueries({ queryKey: ["cashflow"] });
+      queryClient.invalidateQueries({ queryKey: ["pie-chart"] });
+      queryClient.invalidateQueries({ queryKey: ["bar-chart"] });
+      onSuccess();
+    },
+    onError: () => {
+      toast.error("Gagal Mengubah Data");
+    },
+  });
 
-      if (incomeDetail) {
-        form.reset({
-          amount: incomeDetail.data.amount.toString(),
-          date: new Date(incomeDetail.data.date),
-        });
-      }
-    };
-    getDetailUsers();
-  }, []);
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    mutate(values);
+  }
+  const { data: incomeDetail } = useQuery({
+    queryKey: ["income", id],
+    queryFn: async () => {
+      const res = await sendRequest({ url: `income/${id}` });
+      return res.data;
+    },
+  });
+  useEffect(() => {
+    if (incomeDetail) {
+      form.reset({
+        amount: incomeDetail?.amount.toString(),
+        date: new Date(incomeDetail?.date),
+      });
+    }
+  }, [incomeDetail]);
+
   return (
     <div>
       <Form {...form}>
@@ -103,6 +119,7 @@ const FormEditIncome = ({ id, onSuccess }: FormEditIncomeProps) => {
                       placeholder="Masukkan Jumlah Pengeluaran"
                       {...field}
                       onChange={(e) => field.onChange(e.target.value)}
+                      autoComplete="off"
                     />
                   </FormControl>
                 </div>
@@ -166,7 +183,7 @@ const FormEditIncome = ({ id, onSuccess }: FormEditIncomeProps) => {
           <Button
             type="submit"
             className="w-full cursor-pointer bg-clr-pumpkin hover:!bg-orange-600"
-            disabled={loading}
+            disabled={isPending}
           >
             Tambah
           </Button>
