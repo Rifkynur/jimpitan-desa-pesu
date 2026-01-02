@@ -1,33 +1,37 @@
 "use client";
+
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { useAuthStore } from "@/store/auth-store";
-import { useLogout } from "@/hooks/use-logout";
 
 const CheckAuth = () => {
   const { sendRequest } = useFetchApi();
-  const { isLoggedIn, login } = useAuthStore();
-  const logout = useLogout();
-  const { data, isError } = useQuery({
+  const { login, logouts } = useAuthStore();
+
+  const { data } = useQuery({
     queryKey: ["check-auth"],
-    queryFn: async () => {
-      const res = await sendRequest({
+    queryFn: () =>
+      sendRequest({
         method: "GET",
         url: "auth/checkAuth",
-      });
-      return res;
-    },
+      }),
+
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    staleTime: Infinity,
   });
+
   useEffect(() => {
     if (data) {
-      login(data?.role?.name);
-      console.log(data);
-    }
-    if (isError) {
-      logout();
+      login(data.role?.name);
+    } else {
+      logouts();
     }
   }, [data]);
+
   return null;
 };
 

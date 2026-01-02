@@ -35,6 +35,7 @@ export const useFetchApi = <T = unknown>() => {
         console.log("Unexpected error:", error);
         setError("Ada Kesalahan");
       }
+      throw new Error
 
       return null;
     } finally {

@@ -16,6 +16,11 @@ type IncomeTableProps = {
   loading: boolean;
 };
 
+type mapIncome = {
+  id: string;
+  amount?: string | number;
+  date: string;
+};
 const IncomeTable = ({
   page,
   totalPage,
@@ -27,14 +32,14 @@ const IncomeTable = ({
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 
-  const formattedData = dataDetailIncome.data.flatMap((rtGroup) =>
+  const formattedData = dataDetailIncome?.data?.flatMap((rtGroup) =>
     rtGroup.members.map((member) => ({
       name: member.name,
-      values: Object.entries(member.weeklyAmounts).flatMap(([date, amounts]) =>
-        amounts.map((a) => ({
-          id: a.id,
-          amount: `Rp.${a.amount.toLocaleString("id-ID")}`,
-          date: formatDate(date),
+      values: Object.values(member.weeklyAmounts ?? {}).flatMap((week: any) =>
+        week?.incomes?.map((income: mapIncome) => ({
+          id: income.id,
+          amount: `Rp.${income.amount?.toLocaleString("id-ID")}`,
+          date: formatDate(week.date),
         }))
       ),
     }))

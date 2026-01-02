@@ -46,7 +46,7 @@ const TableIncome = ({ data, onEdit, onDelete, headers }: TableIncomeProps) => {
           member.values.map((v: any) => v.date).filter(Boolean)
         )
       )
-    );
+    ).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
 
   return (
     <div className="overflow-x-auto max-w-[100vw] w-full bg-card-background custom-scroll">
