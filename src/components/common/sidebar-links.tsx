@@ -37,10 +37,10 @@ export function SidebarLinks() {
     { href: "/", label: "Home", icon: Home },
     { href: "/income", label: "Pemasukan", icon: DollarSign },
     { href: "/expense", label: "Pengeluaran", icon: Wallet },
-    { href: "/schedule", label: "Jadwal", icon: CalendarDays },
-    { href: "/member", label: "Warga", icon: Users },
+    // { href: "/schedule", label: "Jadwal", icon: CalendarDays },
     // { href: "/report", label: "Report", icon: ClipboardCheck },
-    { href: "/user", label: "Petugas", icon: UserRound },
+    { href: "/member", label: "Warga", icon: Users },
+    { href: "/user", label: "Akun", icon: UserRound },
   ];
 
   const AuthLink: LinkItem[] =
@@ -50,7 +50,7 @@ export function SidebarLinks() {
           { href: "/", label: "Home", icon: Home },
           { href: "/income", label: "Pemasukan", icon: DollarSign },
           { href: "/expense", label: "Pengeluaran", icon: Wallet },
-          { href: "/schedule", label: "Jadwal", icon: CalendarDays },
+          // { href: "/schedule", label: "Jadwal", icon: CalendarDays },
           { href: "/member", label: "Warga", icon: Users },
           // { href: "/report", label: "Report", icon: ClipboardCheck },
         ];
@@ -69,7 +69,7 @@ export function SidebarLinks() {
                 onClick={link.onClick}
                 className={clsx(
                   "flex items-center gap-2 rounded-md px-3 py-2 transition-colors hover:!bg-orange-600 hover:!text-clr-silver",
-                  pathname === link.href ? "bg-clr-pumpkin" : ""
+                  pathname === link.href ? "bg-clr-pumpkin" : "",
                 )}
               >
                 <link.icon className="h-4 w-4" />
@@ -80,7 +80,7 @@ export function SidebarLinks() {
                 href={link.href!}
                 className={clsx(
                   "flex items-center gap-2 rounded-md px-3 py-2 transition-colors hover:!bg-orange-600 hover:!text-clr-silver",
-                  pathname === link.href ? "bg-clr-pumpkin" : ""
+                  pathname === link.href ? "bg-clr-pumpkin" : "",
                 )}
               >
                 <link.icon className="h-4 w-4" />

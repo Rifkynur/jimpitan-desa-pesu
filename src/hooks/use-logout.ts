@@ -2,10 +2,12 @@ import { useFetchApi } from "./use-fetch-api";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/auth-store";
 import { useMutation,useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 export const useLogout = () => {
   const { logouts } = useAuthStore();
   const { sendRequest } = useFetchApi();
+  const router = useRouter();
 
   const queryClient = useQueryClient()
   const {mutate} = useMutation({
@@ -15,14 +17,15 @@ export const useLogout = () => {
     },onSuccess:()=>{
       toast.success("Berhasil Logout");
       queryClient.invalidateQueries({queryKey:["check-auth"]})
+      router.push("/login");
     },onError:()=>{
       toast.error("Gagal Logout");
     }
   })
   const logout = async () => {
     mutate()
-    
+
   };
   return logout;
-  
+
 };

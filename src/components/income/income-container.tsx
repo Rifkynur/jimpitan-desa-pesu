@@ -10,9 +10,11 @@ import { useAuthStore } from "@/store/auth-store";
 import { useQuery } from "@tanstack/react-query";
 
 const IncomeContainer = () => {
-  const [selectedYear, setSelectedYear] = useState<string | number>(2025);
+  const [selectedYear, setSelectedYear] = useState<string | number>(
+    new Date().getFullYear(),
+  );
   const [selectedRt, setSelectedRt] = useState<string | number>(
-    "f7d8c89f-7342-4779-bf39-40a6a8adb483"
+    "ca0b28f2-edd1-4738-8afc-5f612e649d98",
   );
   const [page, setPage] = useState(1);
 

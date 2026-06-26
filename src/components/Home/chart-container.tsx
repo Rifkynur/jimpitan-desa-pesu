@@ -10,13 +10,15 @@ import { useQuery } from "@tanstack/react-query";
 
 const ChartContainer = () => {
   const [selectedRt, setSelectedRt] = useState<string | number>(
-    "f7d8c89f-7342-4779-bf39-40a6a8adb483"
+    "ca0b28f2-edd1-4738-8afc-5f612e649d98",
   );
-  const [selectedYear, setSelectedYear] = useState<string | number>(2025);
+  const [selectedYear, setSelectedYear] = useState<string | number>(
+    new Date().getFullYear(),
+  );
   const { sendRequest, loading } = useFetchApi();
 
   const { data: barcharData, isLoading: loadingBarChart } = useQuery({
-    queryKey: ["bar-chart", selectedRt, selectedRt],
+    queryKey: ["bar-chart", selectedYear, selectedRt],
     queryFn: async () => {
       const res = await sendRequest({
         url: "totalIncomeMonthlyPerRtPeryearPerRt",

@@ -56,6 +56,7 @@ const FormAddMember = ({ onSuccess }: FormAddMemberProps) => {
       onSuccess();
       toast.success("Berhasil Menambah Warga Baru");
       queryClient.invalidateQueries({ queryKey: ["members"] });
+      queryClient.invalidateQueries({ queryKey: ["member-select"] });
       queryClient.invalidateQueries({ queryKey: ["income"] });
       queryClient.invalidateQueries({ queryKey: ["total-income"] });
     },

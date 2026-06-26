@@ -3,11 +3,13 @@ import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { log } from "console";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useAuthStore } from "@/store/auth-store";
 
 export const useFetchApi = <T = unknown>() => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>("");
+  const { logouts } = useAuthStore();
 
   const sendRequest = async (config: AxiosRequestConfig) => {
     setLoading(true);
@@ -20,12 +22,26 @@ export const useFetchApi = <T = unknown>() => {
         headers: { "Content-Type": "application/json", ...config.headers },
         params: config.params,
         withCredentials: true,
+        timeout: 10000, // 10 detik timeout
       });
 
       setData(response.data);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+
+        // Auto-logout jika 401 (Unauthorized)
+        if (status === 401) {
+          logouts();
+          toast.error("Sesi habis, silakan login kembali");
+          // Redirect ke login page (client-side only)
+          if (typeof window !== "undefined") {
+            window.location.href = "/login";
+          }
+          throw error;
+        }
+
         // sekarang TypeScript tahu ini AxiosError
         const message = error.response?.data?.msg ?? error.message;
         console.log(message);
@@ -35,9 +51,7 @@ export const useFetchApi = <T = unknown>() => {
         console.log("Unexpected error:", error);
         setError("Ada Kesalahan");
       }
-      throw new Error
-
-      return null;
+      throw error;
     } finally {
       setLoading(false);
     }

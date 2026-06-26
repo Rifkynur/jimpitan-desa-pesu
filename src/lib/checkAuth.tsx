@@ -2,20 +2,21 @@
 
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useFetchApi } from "@/hooks/use-fetch-api";
+import axios from "axios";
 import { useAuthStore } from "@/store/auth-store";
 
 const CheckAuth = () => {
-  const { sendRequest } = useFetchApi();
   const { login, logouts } = useAuthStore();
 
-  const { data } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: ["check-auth"],
-    queryFn: () =>
-      sendRequest({
-        method: "GET",
-        url: "auth/checkAuth",
-      }),
+    queryFn: async () => {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/auth/checkAuth`,
+        { withCredentials: true, timeout: 10000 }
+      );
+      return response.data;
+    },
 
     retry: false,
     refetchOnWindowFocus: false,
@@ -25,12 +26,16 @@ const CheckAuth = () => {
   });
 
   useEffect(() => {
-    if (data) {
-      login(data.role?.name);
-    } else {
-      logouts();
+    // Hanya handle setelah loading selesai
+    if (!isLoading) {
+      if (data) {
+        login(data.role?.name);
+      } else if (error) {
+        // Hanya logout jika ada error, bukan saat loading
+        logouts();
+      }
     }
-  }, [data]);
+  }, [data, error, isLoading, login, logouts]);
 
   return null;
 };

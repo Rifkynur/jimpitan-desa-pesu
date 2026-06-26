@@ -32,7 +32,7 @@ const formSchema = z.object({
 
 const CardLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useAuthStore();
+  const { login, logouts } = useAuthStore();
   const router = useRouter();
 
   const { sendRequest, data, loading, error } = useFetchApi();
@@ -57,10 +57,30 @@ const CardLogin = () => {
       return res;
     },
     onSuccess: async (datas) => {
-      toast.success("Berhasil login");
-      router.push("/");
-      queryClient.invalidateQueries({ queryKey: ["check-auth"] });
-      await login(datas?.userData?.role?.name);
+      // Set login state dulu
+      login(datas?.userData?.role?.name);
+
+      // Invalidate dan tunggu check-auth selesai untuk validasi cookie
+      await queryClient.invalidateQueries({ queryKey: ["check-auth"] });
+
+      // Tunggu sebentar untuk memastikan cookie sudah tersimpan di browser
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Fetch check-auth untuk memastikan cookie benar-benar sudah valid
+      const authCheck = await sendRequest({
+        method: "GET",
+        url: "auth/checkAuth",
+      });
+
+      // Jika check-auth berhasil, baru redirect
+      if (authCheck) {
+        toast.success("Berhasil login");
+        router.push("/");
+      } else {
+        // Jika check-auth gagal, logout dan beri error
+        logouts();
+        toast.error("Gagal validasi sesi, silakan coba lagi");
+      }
     },
     onError: (err: any) => {
       toast.error("Username/password salah");
@@ -87,7 +107,11 @@ const CardLogin = () => {
                 <FormItem className="space-y-2">
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Masukkan username" {...field} />
+                    <Input
+                      placeholder="Masukkan username"
+                      {...field}
+                      autoComplete="off"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
