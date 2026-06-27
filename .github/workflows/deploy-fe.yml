@@ -1,0 +1,33 @@
+name: Deploy Frontend to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: 22
+          script: |
+            # 1. Masuk ke folder repo FE di VPS dan tarik kode terbaru
+            cd ~/website/jimpitan-frontend || exit
+            git pull origin main
+
+            # 2. Inject file .env frontend dari GitHub Secrets
+            echo "${{ secrets.ENV_FRONTEND }}" > .env
+
+            # 3. Masuk ke folder induk dan rebuild hanya service frontend
+            cd ~/website
+            docker compose up -d --build frontend
+
+            # 4. Bersihkan sisa image lama
+            docker image prune -f

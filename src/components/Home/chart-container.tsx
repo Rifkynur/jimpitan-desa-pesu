@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FilterYear from "../common/filter-year";
 import FilterSelectRt from "../common/filter-select-rt";
 import { BarChartComponent } from "./bar-chart-component";
@@ -9,13 +9,29 @@ import SpinnerLoader from "../common/spiner-loading";
 import { useQuery } from "@tanstack/react-query";
 
 const ChartContainer = () => {
-  const [selectedRt, setSelectedRt] = useState<string | number>(
-    "ca0b28f2-edd1-4738-8afc-5f612e649d98",
-  );
+  const [selectedRt, setSelectedRt] = useState<string | number>("");
   const [selectedYear, setSelectedYear] = useState<string | number>(
     new Date().getFullYear(),
   );
   const { sendRequest, loading } = useFetchApi();
+
+  // Set default selectedRt ke RT '09
+  const { data: rt09Data } = useQuery({
+    queryKey: ["rt-09"],
+    queryFn: async () => {
+      const res = await sendRequest({
+        url: "rt",
+        params: { name: "09" },
+      });
+      return { allRt: res.allRt };
+    },
+  });
+
+  useEffect(() => {
+    if (rt09Data?.allRt && rt09Data.allRt.length > 0 && !selectedRt) {
+      setSelectedRt(rt09Data.allRt[0].id);
+    }
+  }, [rt09Data, selectedRt]);
 
   const { data: barcharData, isLoading: loadingBarChart } = useQuery({
     queryKey: ["bar-chart", selectedYear, selectedRt],
@@ -29,6 +45,7 @@ const ChartContainer = () => {
       });
       return res.data;
     },
+    enabled: !!selectedRt,
     staleTime: 1000 * 60 * 30,
   });
 
@@ -41,6 +58,7 @@ const ChartContainer = () => {
       });
       return res.data;
     },
+    enabled: !!selectedRt,
     staleTime: 1000 * 60 * 30,
   });
 
@@ -54,7 +72,9 @@ const ChartContainer = () => {
           isChart
         />
       </div>
-      {loading ? (
+      {!selectedRt ? (
+        <SpinnerLoader />
+      ) : loading ? (
         <SpinnerLoader />
       ) : (
         <div className=" grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-4">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FilterSelectRt from "../common/filter-select-rt";
 import FilterYear from "../common/filter-year";
 import ButtonModalAddIncome from "./button-modal-add-income";
@@ -13,9 +13,7 @@ const IncomeContainer = () => {
   const [selectedYear, setSelectedYear] = useState<string | number>(
     new Date().getFullYear(),
   );
-  const [selectedRt, setSelectedRt] = useState<string | number>(
-    "ca0b28f2-edd1-4738-8afc-5f612e649d98",
-  );
+  const [selectedRt, setSelectedRt] = useState<string | number>("");
   const [page, setPage] = useState(1);
 
   const [totalIncomePage, setTotalIncomePage] = useState(1);
@@ -23,6 +21,24 @@ const IncomeContainer = () => {
 
   const { sendRequest, loading } = useFetchApi();
   const { isLoggedIn } = useAuthStore();
+
+  // Set default selectedRt ke RT '09
+  const { data: rt09Data } = useQuery({
+    queryKey: ["rt-09-income"],
+    queryFn: async () => {
+      const res = await sendRequest({
+        url: "rt",
+        params: { name: "09" },
+      });
+      return { allRt: res.allRt };
+    },
+  });
+
+  useEffect(() => {
+    if (rt09Data?.allRt && rt09Data.allRt.length > 0 && !selectedRt) {
+      setSelectedRt(rt09Data.allRt[0].id);
+    }
+  }, [rt09Data, selectedRt]);
 
   const getDetailIncome = async () => {
     const res = await sendRequest({
@@ -49,6 +65,7 @@ const IncomeContainer = () => {
       });
       return res;
     },
+    enabled: !!selectedRt,
     staleTime: 1000 * 60 * 30,
   });
   const totalPage = detailIncome?.totalPage ?? 1;
@@ -65,6 +82,7 @@ const IncomeContainer = () => {
       });
       return res;
     },
+    enabled: !!selectedRt,
     staleTime: 1000 * 60 * 30,
   });
 
@@ -79,7 +97,9 @@ const IncomeContainer = () => {
         <FilterYear setYear={setSelectedYear} year={selectedYear} />
         {isLoggedIn && <ButtonModalAddIncome />}
       </div>
-      {loading ? (
+      {!selectedRt ? (
+        <SpinnerLoader />
+      ) : loading ? (
         <SpinnerLoader />
       ) : (
         detailIncome && (
