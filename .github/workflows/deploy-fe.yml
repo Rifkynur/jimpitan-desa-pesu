@@ -17,17 +17,19 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: 22
-          script: |
-            # 1. Masuk ke folder repo FE di VPS dan tarik kode terbaru
-            cd ~/website/jimpitan-frontend || exit
-            git pull origin main
+        script: |
+          # 1. Masuk ke folder repo jimpitan yang bener di VPS
+          cd ~/jimpitan/jimpitan-frontend || exit
+          git pull origin main
 
-            # 2. Inject file .env frontend dari GitHub Secrets
-            echo "${{ secrets.ENV_FRONTEND }}" > .env
+          # 2. Suntik file .env baru (yang ujungnya udah ada /api) ke folder yang bener
+          echo "${{ secrets.ENV_FRONTEND }}" > .env
 
-            # 3. Masuk ke folder induk dan rebuild hanya service frontend
-            cd ~/website
-            docker compose up -d --build frontend
+          # 3. Masuk ke folder utama jimpitan untuk nembak docker-compose yang bener
+          cd ~/jimpitan
+          docker compose down frontend
+          docker compose build --no-cache frontend
+          docker compose up -d frontend
 
-            # 4. Bersihkan sisa image lama
-            docker image prune -f
+          # 4. Bersihkan sisa-sisa image lama
+          docker image prune -f
