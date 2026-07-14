@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import FilterSelectRt from "../common/filter-select-rt";
 import FilterYear from "../common/filter-year";
 import ButtonModalAddIncome from "./button-modal-add-income";
+import ButtonModalReportIncome from "./button-modal-report-income";
 import TabIncomeTable from "./tab-income-table";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import SpinnerLoader from "../common/spiner-loading";
@@ -88,14 +89,19 @@ const IncomeContainer = () => {
 
   return (
     <div className="flex flex-col gap-4 md:gap-6 max-w-[100vw]">
-      <div className="flex gap-2">
+      <div className="flex gap-1">
         <FilterSelectRt
           selectedRt={selectedRt}
           setSelectedRt={setSelectedRt}
           isChart
         />
         <FilterYear setYear={setSelectedYear} year={selectedYear} />
-        {isLoggedIn && <ButtonModalAddIncome />}
+        {isLoggedIn && (
+          <>
+            <ButtonModalReportIncome />
+            <ButtonModalAddIncome />
+          </>
+        )}
       </div>
       {!selectedRt ? (
         <SpinnerLoader />

@@ -3,6 +3,7 @@ import { useState } from "react";
 import FilterYear from "../common/filter-year";
 import TableExpenseContainer from "./table-expense-container";
 import ButtonModalAddExpense from "./button-modal-add-expense";
+import ButtonModalReportExpense from "./button-modal-report-expense";
 import { useFetchApi } from "@/hooks/use-fetch-api";
 import { useAuthStore } from "@/store/auth-store";
 import { useQuery } from "@tanstack/react-query";
@@ -29,9 +30,14 @@ const ExpenseContainer = () => {
 
   return (
     <div className="flex flex-col gap-4 md:gap-6">
-      <div className="flex gap-2">
+      <div className="flex gap-1">
         <FilterYear setYear={setYear} year={year} />
-        {isLoggedIn && role == "admin" && <ButtonModalAddExpense />}
+        {isLoggedIn && role == "admin" && (
+          <>
+            <ButtonModalReportExpense />
+            <ButtonModalAddExpense />
+          </>
+        )}
       </div>
       <TableExpenseContainer
         expense={data}

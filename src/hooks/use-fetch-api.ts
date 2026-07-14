@@ -23,6 +23,7 @@ export const useFetchApi = <T = unknown>() => {
         params: config.params,
         withCredentials: true,
         timeout: 10000, // 10 detik timeout
+        responseType: config.responseType || "json",
       });
 
       setData(response.data);
