@@ -89,7 +89,10 @@ const IncomeContainer = () => {
 
   return (
     <div className="flex flex-col gap-4 md:gap-6 max-w-[100vw]">
-      <div className="flex gap-1">
+      <div
+        className="flex gap-1
+      "
+      >
         <FilterSelectRt
           selectedRt={selectedRt}
           setSelectedRt={setSelectedRt}

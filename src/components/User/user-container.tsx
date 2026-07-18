@@ -48,7 +48,11 @@ const UserContainer = () => {
     <div>
       <div className="mb-2 flex items-center gap-2">
         <FilterSelectRt selectedRt={selectedRt} setSelectedRt={setSelectedRt} />
-        <SearchComponent search={search} setSearch={setSearch} />
+        <SearchComponent
+          search={search}
+          setSearch={setSearch}
+          placeholder="cari akun..."
+        />
         {role == "admin" && <ButtonOpenModalAddUser />}
       </div>
       <UserTable users={users} loading={isLoading} />
