@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import * as React from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
 
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Popover, PopoverTrigger } from '@/components/ui/popover';
-import { SelectOption } from '@/types/select-option-type';
-import SpinnerLoader from './spiner-loading';
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import { SelectOption } from "@/types/select-option-type";
+import SpinnerLoader from "./spiner-loading";
 
 type SearchableSelectProps = {
   options: SelectOption[];
@@ -18,19 +18,36 @@ type SearchableSelectProps = {
   loading?: boolean;
 };
 
-export function SelectComponent({ options, value, onChange, placeholder = 'Pilih opsi...', loading, className }: SearchableSelectProps) {
+export function SelectComponent({
+  options,
+  value,
+  onChange,
+  placeholder = "Pilih opsi...",
+  loading,
+  className,
+}: SearchableSelectProps) {
   const [open, setOpen] = React.useState(false);
-  const [search, setSearch] = React.useState('');
+  const [search, setSearch] = React.useState("");
 
-  const filtered = options?.filter((opt) => opt.label.toLowerCase().includes(search.toLowerCase()));
+  const filtered = options?.filter((opt) =>
+    opt.label.toLowerCase().includes(search.toLowerCase()),
+  );
 
   const selectedOption = options?.find((opt) => opt.value === value);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <div className="relative">
-        <PopoverTrigger asChild className="border-clr-pumpkin bg-clr-primary hover:bg-[#ffffff70]">
-          <Button variant="outline" role="combobox" aria-expanded={open} className={cn('w-[150px] md:w-[200px] justify-between', className)}>
+        <PopoverTrigger
+          asChild
+          className="border-clr-pumpkin bg-clr-primary hover:bg-[#ffffff70]"
+        >
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className={cn("w-[100px] md:w-[200px] justify-between", className)}
+          >
             {selectedOption ? selectedOption.label : placeholder}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -49,7 +66,9 @@ export function SelectComponent({ options, value, onChange, placeholder = 'Pilih
               <SpinnerLoader />
             ) : (
               <div className="max-h-60 overflow-y-auto touch-pan-y">
-                {filtered?.length === 0 && <div className="p-2 text-sm opacity-70">Tidak ditemukan</div>}
+                {filtered?.length === 0 && (
+                  <div className="p-2 text-sm opacity-70">Tidak ditemukan</div>
+                )}
 
                 {filtered?.map((opt) => (
                   <div
@@ -60,7 +79,12 @@ export function SelectComponent({ options, value, onChange, placeholder = 'Pilih
                     }}
                     className="flex items-center gap-2 p-2 rounded-mdactive:bg-white/20 capitalize"
                   >
-                    <Check className={cn('h-4 w-4', opt.value === value ? 'opacity-100' : 'opacity-0')} />
+                    <Check
+                      className={cn(
+                        "h-4 w-4",
+                        opt.value === value ? "opacity-100" : "opacity-0",
+                      )}
+                    />
                     {opt.label}
                   </div>
                 ))}
