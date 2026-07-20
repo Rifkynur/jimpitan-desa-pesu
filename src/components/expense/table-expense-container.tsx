@@ -38,10 +38,20 @@ const TableExpenseContainer = ({
     {
       key: "amount",
       label: "Total",
+      render: (row: any) => (
+        <div className="text-center">
+          {row.amount.toLocaleString('id-ID')}
+        </div>
+      ),
     },
     {
       key: "description",
       label: "Keterangan",
+      render: (row: any) => (
+        <div className="max-w-[250px] break-words text-center whitespace-normal">
+          {row.description}
+        </div>
+      ),
     },
   ];
 
